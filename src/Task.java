@@ -5,9 +5,7 @@ public class Task {
     private Status status;
 
     public Task(String title, String description, Status status) {
-        id = TaskManager.taskId;
-        TaskManager.taskId++;
-
+        id = TaskManager.taskId++;
         this.title = title;
         this.description = description;
         this.status = status;
@@ -23,5 +21,15 @@ public class Task {
 
     public Status getStatus(){
         return status;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + getId() +
+                ", status=" + getStatus() +
+                '}';
     }
 }
