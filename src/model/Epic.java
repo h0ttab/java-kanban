@@ -1,16 +1,59 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 
 public class Epic extends Task {
-    private final List<Integer> subTaskIdList = new ArrayList<>();
+    private final Map<Integer, Status> relatedSubTaskMap = new HashMap<>();
 
     public Epic(String title, String description) {
         super(title, description, Status.NEW);
     }
 
     public List<Integer> getSubTaskIdList() {
-        return subTaskIdList;
+        return new ArrayList<>(relatedSubTaskMap.keySet());
+    }
+
+    public void addSubTask(int id, Status status) {
+        relatedSubTaskMap.put(id, status);
+    }
+
+    public void removeSubTask(int id) {
+        if (relatedSubTaskMap.containsKey(id)) {
+            relatedSubTaskMap.remove(id);
+        } else {
+            throw new IllegalArgumentException("В эпике id" + getId()
+                    + " не найдена связанная подзадача с id " + id);
+        }
+    }
+
+    public void updateSubTask(SubTask subTask){
+        if (relatedSubTaskMap.containsKey(subTask.getId())){
+            relatedSubTaskMap.put(subTask.getId(), subTask.getStatus());
+        } else {
+            throw new IllegalArgumentException("В эпике id" + getId()
+                    + " не найдена связанная подзадача с id " + subTask.getId());
+        }
+    }
+    @Override
+    public Status getStatus(){
+        boolean isAllNew = true;
+        boolean isAllDone = true;
+
+        if (relatedSubTaskMap.isEmpty()) return Status.NEW;
+        for (Status status : relatedSubTaskMap.values()){
+            if (status != Status.NEW){
+                isAllNew = false;
+            }
+            if (status != Status.DONE){
+                isAllDone = false;
+            }
+        }
+
+        if (isAllNew) return Status.NEW;
+        if (isAllDone) return Status.DONE;
+        else return Status.IN_PROGRESS;
     }
 }

@@ -4,7 +4,7 @@ import java.util.Objects;
 import service.IdGenerator;
 
 public class Task {
-    private final int id = IdGenerator.generateUniqueId();
+    private int id = IdGenerator.generateUniqueId();
     private String title;
     private String description;
     private Status status;
@@ -40,6 +40,10 @@ public class Task {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public String getTitle() {
