@@ -11,4 +11,15 @@ public class SubTask extends Task {
     public int getEpicId() {
         return epicId;
     }
+
+    @Override
+    public String toString() {
+        return "SubTask{" +
+                "epicId=" + getEpicId() +
+                ", id=" + super.getId() +
+                ", title='" + super.getTitle() + '\'' +
+                ", description.length='" + super.getDescription().length() + '\'' +
+                ", status=" + super.getStatus() +
+                '}';
+    }
 }

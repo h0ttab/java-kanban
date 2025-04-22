@@ -7,22 +7,23 @@ public class Task {
     private int id = IdGenerator.generateUniqueId();
     private String title;
     private String description;
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", description.length='" + getDescription().length() + '\'' +
+                ", status=" + getStatus() +
+                '}';
+    }
+
     private Status status;
 
     public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "model.Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description.length='" + description.length() + '\'' +
-                ", status=" + status +
-                '}' + '\'';
     }
 
     @Override

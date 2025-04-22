@@ -37,6 +37,13 @@ public class Epic extends Task {
                     + " не найдена связанная подзадача с id " + subTask.getId());
         }
     }
+
+    @Override
+    public void setStatus(Status status) {
+        throw new UnsupportedOperationException("Ошибка изменения статуса: "
+                + "для эпиков ручное изменение статуса запрещено");
+    }
+
     @Override
     public Status getStatus(){
         boolean isAllNew = true;
@@ -55,5 +62,16 @@ public class Epic extends Task {
         if (isAllNew) return Status.NEW;
         if (isAllDone) return Status.DONE;
         else return Status.IN_PROGRESS;
+    }
+
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "subTaskIdList=" + getSubTaskIdList() +
+                ", id=" + super.getId() +
+                ", title='" + super.getTitle() + '\'' +
+                ", description.length='" + super.getDescription().length() + '\'' +
+                ", status=" + getStatus() +
+                '}';
     }
 }
