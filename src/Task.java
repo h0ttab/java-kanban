@@ -1,7 +1,7 @@
 import java.util.Objects;
 
 public class Task {
-    private int id;
+    private final int id = IdGenerator.generateUniqueId();
     private String title;
     private String description;
     private Status status;
