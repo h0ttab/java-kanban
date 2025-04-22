@@ -1,33 +1,25 @@
 public class SubTask extends Task {
-    private final int linkedEpicId;
+    private Epic epic;
 
-    public SubTask(String title, String description, Status status, int linkedEpicId) {
+    public SubTask(String title, String description, Status status){
         super(title, description, status);
-        this.linkedEpicId = linkedEpicId;
-        TaskManager.getEpicById(linkedEpicId).addSubTask(getId());
     }
 
-    public void removeSubTask(){
-        Epic epic = TaskManager.getEpicById(linkedEpicId);
-        epic.unlinkSubTask(getId());
+    public Epic getEpic() {
+        return epic;
     }
 
-    public int getLinkedEpicId() {
-        return linkedEpicId;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-        super.setStatus(status);
-        Epic epic = TaskManager.getEpicById(linkedEpicId);
-        epic.refreshStatus();
+    public void setEpic(Epic epic){
+        this.epic = epic;
     }
 
     @Override
     public String toString() {
         return "SubTask{" +
-                "linkedEpicId=" + linkedEpicId +
+                "epicId=" + getEpic().getId() +
                 ", id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +
                 '}';
     }
