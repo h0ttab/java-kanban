@@ -1,4 +1,7 @@
+package model;
+
 import java.util.Objects;
+import service.IdGenerator;
 
 public class Task {
     private final int id = IdGenerator.generateUniqueId();
@@ -14,7 +17,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "model.Task{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description.length='" + description.length() + '\'' +

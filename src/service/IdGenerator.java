@@ -1,3 +1,5 @@
+package service;
+
 public class IdGenerator {
     private static int id;
 
