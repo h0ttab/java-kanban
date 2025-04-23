@@ -49,7 +49,7 @@ public class TaskManager {
         if (allTasks.containsKey(id)) {
             return allTasks.get(id);
         } else {
-            throw new IllegalArgumentException("Задачи с id" + id + " не существует");
+            throw new IllegalArgumentException("Задачи с id " + id + " не существует");
         }
     }
 
@@ -57,7 +57,7 @@ public class TaskManager {
         if (allEpics.containsKey(id)) {
             return allEpics.get(id);
         } else {
-            throw new IllegalArgumentException("Эпика с id" + id + " не существует");
+            throw new IllegalArgumentException("Эпика с id " + id + " не существует");
         }
     }
 
@@ -65,7 +65,7 @@ public class TaskManager {
         if (allSubTasks.containsKey(id)) {
             return allSubTasks.get(id);
         } else {
-            throw new IllegalArgumentException("Подзадачи с id" + id + " не существует");
+            throw new IllegalArgumentException("Подзадачи с id " + id + " не существует");
         }
     }
 
@@ -105,6 +105,7 @@ public class TaskManager {
 
     public void updateEpic(Epic epic, int id) {
         Map<Integer, Status> subTasksMapBuffer = getEpicById(id).getRelatedSubTaskMap();
+
         epic.setRelatedSubTaskMap(subTasksMapBuffer);
         epic.setId(id);
         createEpic(epic);
@@ -112,10 +113,11 @@ public class TaskManager {
 
     public void updateSubTask(SubTask subTask, int id) {
         if (allSubTasks.containsKey(id)) {
-            subTask.setId(id);
             SubTask oldSubTask = getSubTaskById(id);
             Epic oldEpic = getEpicById(oldSubTask.getEpicId());
             Epic newEpic = getEpicById(subTask.getEpicId());
+
+            subTask.setId(id);
 
             if (newEpic.equals(oldEpic)) {
                 newEpic.updateSubTask(subTask);
@@ -123,7 +125,7 @@ public class TaskManager {
                 oldEpic.unlinkSubTask(id);
                 newEpic.addSubTask(id, subTask.getStatus());
             }
-            allSubTasks.remove(id);
+
             allSubTasks.put(id, subTask);
         } else {
             throw new IllegalArgumentException("Ошибка обновления подзадачи id " + id + " - подзадача не найдена");
@@ -147,6 +149,7 @@ public class TaskManager {
             for (Integer subTaskId : relatedSubTasks) {
                 removeSubTaskById(subTaskId);
             }
+
             allEpics.remove(id);
         } else {
             throw new IllegalArgumentException("Невозможно удалить эпик id "
@@ -158,6 +161,7 @@ public class TaskManager {
         if (allSubTasks.containsKey(id)) {
             SubTask subTask = getSubTaskById(id);
             Epic epic = getEpicById(subTask.getEpicId());
+
             epic.unlinkSubTask(id);
             allSubTasks.remove(id);
         } else {

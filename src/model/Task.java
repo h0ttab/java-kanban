@@ -7,6 +7,13 @@ public class Task {
     private int id = IdGenerator.generateUniqueId();
     private String title;
     private String description;
+    private Status status;
+
+    public Task(String title, String description, Status status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
 
     @Override
     public String toString() {
@@ -16,14 +23,6 @@ public class Task {
                 ", description.length='" + getDescription().length() + '\'' +
                 ", status=" + getStatus() +
                 '}';
-    }
-
-    private Status status;
-
-    public Task(String title, String description, Status status) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
     }
 
     @Override

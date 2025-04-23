@@ -32,7 +32,7 @@ public class Epic extends Task {
         if (relatedSubTaskMap.containsKey(id)) {
             relatedSubTaskMap.remove(id);
         } else {
-            throw new IllegalArgumentException("В эпике id" + getId()
+            throw new IllegalArgumentException("В эпике id " + getId()
                     + " не найдена связанная подзадача с id " + id);
         }
     }
@@ -45,7 +45,7 @@ public class Epic extends Task {
         if (relatedSubTaskMap.containsKey(subTask.getId())) {
             relatedSubTaskMap.put(subTask.getId(), subTask.getStatus());
         } else {
-            throw new IllegalArgumentException("В эпике id" + getId()
+            throw new IllegalArgumentException("В эпике id " + getId()
                     + " не найдена связанная подзадача с id " + subTask.getId());
         }
     }
