@@ -45,9 +45,9 @@ public class Main {
         printAllTasks(taskManager);
     }
 
-    public static void printAllTasks(TaskManager taskManager){
+    public static void printAllTasks(TaskManager taskManager) {
         System.out.println(taskManager.getAllTasksList());
         System.out.println(taskManager.getAllEpicsList());
-        System.out.println(taskManager.getAlllSubTasksList());
+        System.out.println(taskManager.getAllSubTasksList());
     }
 }

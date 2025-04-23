@@ -1,6 +1,7 @@
 package service;
 
 import model.Epic;
+import model.Status;
 import model.SubTask;
 import model.Task;
 
@@ -14,28 +15,28 @@ public class TaskManager {
     private final Map<Integer, Epic> allEpics = new HashMap<>();
     private final Map<Integer, SubTask> allSubTasks = new HashMap<>();
 
-    public List<Task> getAllTasksList(){
+    public List<Task> getAllTasksList() {
         return new ArrayList<>(allTasks.values());
     }
 
-    public List<Epic> getAllEpicsList(){
+    public List<Epic> getAllEpicsList() {
         return new ArrayList<>(allEpics.values());
     }
 
-    public List<SubTask> getAlllSubTasksList(){
+    public List<SubTask> getAllSubTasksList() {
         return new ArrayList<>(allSubTasks.values());
     }
 
-    public void removeAllTasks(){
+    public void removeAllTasks() {
         allTasks.clear();
     }
 
-    public void removeAllEpics(){
+    public void removeAllEpics() {
         removeAllSubTasks();
         allEpics.clear();
     }
 
-    public void removeAllSubTasks(){
+    public void removeAllSubTasks() {
         List<Epic> epics = getAllEpicsList();
 
         for (Epic epic : epics) {
@@ -44,7 +45,7 @@ public class TaskManager {
         allSubTasks.clear();
     }
 
-    public Task getTaskById(int id){
+    public Task getTaskById(int id) {
         if (allTasks.containsKey(id)) {
             return allTasks.get(id);
         } else {
@@ -52,33 +53,33 @@ public class TaskManager {
         }
     }
 
-    public Epic getEpicById(int id){
-        if (allEpics.containsKey(id)){
+    public Epic getEpicById(int id) {
+        if (allEpics.containsKey(id)) {
             return allEpics.get(id);
         } else {
             throw new IllegalArgumentException("Эпика с id" + id + " не существует");
         }
     }
 
-    public SubTask getSubTaskById(int id){
-        if (allSubTasks.containsKey(id)){
+    public SubTask getSubTaskById(int id) {
+        if (allSubTasks.containsKey(id)) {
             return allSubTasks.get(id);
         } else {
             throw new IllegalArgumentException("Подзадачи с id" + id + " не существует");
         }
     }
 
-    public List<SubTask> getAllSubTasksOfEpic(int id){
+    public List<SubTask> getAllSubTasksOfEpic(int id) {
         List<SubTask> subTaskList = new ArrayList<>();
         Epic epic = getEpicById(id);
 
-        for(Integer subTaskId : epic.getSubTaskIdList()){
+        for (Integer subTaskId : epic.getSubTaskIdList()) {
             subTaskList.add(getSubTaskById(subTaskId));
         }
         return subTaskList;
     }
 
-    public void createTask(Task task){
+    public void createTask(Task task) {
         allTasks.put(task.getId(), task);
     }
 
@@ -86,46 +87,51 @@ public class TaskManager {
         allEpics.put(epic.getId(), epic);
     }
 
-    public void createSubTask(SubTask subTask){
+    public void createSubTask(SubTask subTask) {
         Epic relatedEpic = getEpicById(subTask.getEpicId());
 
         relatedEpic.addSubTask(subTask.getId(), subTask.getStatus());
         allSubTasks.put(subTask.getId(), subTask);
     }
 
-    public void updateTask(Task task, int id){
-        if (allTasks.containsKey(id)){
+    public void updateTask(Task task, int id) {
+        if (allTasks.containsKey(id)) {
             task.setId(id);
             allTasks.put(id, task);
         } else {
-            throw new IllegalArgumentException("Задачи с таким id не существует");
+            throw new IllegalArgumentException("Ошибка обновления задачи id " + id + " - задача не найдена");
         }
     }
 
     public void updateEpic(Epic epic, int id) {
-        removeEpicById(id);
+        Map<Integer, Status> subTasksMapBuffer = getEpicById(id).getRelatedSubTaskMap();
+        epic.setRelatedSubTaskMap(subTasksMapBuffer);
         epic.setId(id);
         createEpic(epic);
     }
 
-    public void updateSubTask(SubTask subTask, int id){
-        subTask.setId(id);
-        SubTask oldSubTask = getSubTaskById(id);
-        Epic oldEpic = getEpicById(oldSubTask.getEpicId());
-        Epic newEpic = getEpicById(subTask.getEpicId());
+    public void updateSubTask(SubTask subTask, int id) {
+        if (allSubTasks.containsKey(id)) {
+            subTask.setId(id);
+            SubTask oldSubTask = getSubTaskById(id);
+            Epic oldEpic = getEpicById(oldSubTask.getEpicId());
+            Epic newEpic = getEpicById(subTask.getEpicId());
 
-        if (newEpic.equals(oldEpic)){
-            newEpic.updateSubTask(subTask);
+            if (newEpic.equals(oldEpic)) {
+                newEpic.updateSubTask(subTask);
+            } else {
+                oldEpic.unlinkSubTask(id);
+                newEpic.addSubTask(id, subTask.getStatus());
+            }
+            allSubTasks.remove(id);
+            allSubTasks.put(id, subTask);
         } else {
-            oldEpic.unlinkSubTask(id);
-            newEpic.addSubTask(id, subTask.getStatus());
+            throw new IllegalArgumentException("Ошибка обновления подзадачи id " + id + " - подзадача не найдена");
         }
-        allSubTasks.remove(id);
-        allSubTasks.put(id, subTask);
     }
 
-    public void removeTaskById(int id){
-        if (allTasks.containsKey(id)){
+    public void removeTaskById(int id) {
+        if (allTasks.containsKey(id)) {
             allTasks.remove(id);
         } else {
             throw new IllegalArgumentException("Невозможно удалить задачу id "
@@ -133,12 +139,12 @@ public class TaskManager {
         }
     }
 
-    public void removeEpicById(int id){
+    public void removeEpicById(int id) {
         if (allEpics.containsKey(id)) {
             Epic epic = getEpicById(id);
-            List <Integer> relatedSubTasks = epic.getSubTaskIdList();
+            List<Integer> relatedSubTasks = epic.getSubTaskIdList();
 
-            for (Integer subTaskId : relatedSubTasks){
+            for (Integer subTaskId : relatedSubTasks) {
                 removeSubTaskById(subTaskId);
             }
             allEpics.remove(id);
@@ -149,7 +155,7 @@ public class TaskManager {
     }
 
     public void removeSubTaskById(int id) {
-        if (allSubTasks.containsKey(id)){
+        if (allSubTasks.containsKey(id)) {
             SubTask subTask = getSubTaskById(id);
             Epic epic = getEpicById(subTask.getEpicId());
             epic.unlinkSubTask(id);
