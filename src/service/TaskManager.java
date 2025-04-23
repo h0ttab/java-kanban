@@ -1,14 +1,8 @@
 package service;
 
-import model.Epic;
-import model.Status;
-import model.SubTask;
-import model.Task;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import model.*;
 
 public class TaskManager {
     private final Map<Integer, Task> allTasks = new HashMap<>();
@@ -99,8 +93,8 @@ public class TaskManager {
     }
 
     public void createSubTask(SubTask subTask) {
-        Epic relatedEpic = getEpicById(subTask.getEpicId());
         int newId = idGenerator.generateUniqueId();
+        Epic relatedEpic = getEpicById(subTask.getEpicId());
 
         subTask.setId(newId);
         relatedEpic.addSubTask(subTask.getId(), subTask.getStatus());

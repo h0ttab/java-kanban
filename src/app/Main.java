@@ -1,11 +1,7 @@
 package app;
 
-import model.Epic;
-import model.Status;
-import model.SubTask;
-import model.Task;
-import service.IdGenerator;
-import service.TaskManager;
+import model.*;
+import service.*;
 
 public class Main {
     public static void main(String[] args) {
