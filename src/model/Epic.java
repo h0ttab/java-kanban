@@ -20,13 +20,17 @@ public class Epic extends Task {
         relatedSubTaskMap.put(id, status);
     }
 
-    public void removeSubTask(int id) {
+    public void unlinkSubTask(int id) {
         if (relatedSubTaskMap.containsKey(id)) {
             relatedSubTaskMap.remove(id);
         } else {
             throw new IllegalArgumentException("В эпике id" + getId()
                     + " не найдена связанная подзадача с id " + id);
         }
+    }
+
+    public void unlinkAllSubtasks(){
+        relatedSubTaskMap.clear();
     }
 
     public void updateSubTask(SubTask subTask){

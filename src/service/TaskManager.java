@@ -36,6 +36,11 @@ public class TaskManager {
     }
 
     public void removeAllSubTasks(){
+        List<Epic> epics = getAllEpicsList();
+
+        for (Epic epic : epics) {
+            epic.unlinkAllSubtasks();
+        }
         allSubTasks.clear();
     }
 
@@ -90,6 +95,7 @@ public class TaskManager {
 
     public void updateTask(Task task, int id){
         if (allTasks.containsKey(id)){
+            task.setId(id);
             allTasks.put(id, task);
         } else {
             throw new IllegalArgumentException("Задачи с таким id не существует");
@@ -103,11 +109,19 @@ public class TaskManager {
     }
 
     public void updateSubTask(SubTask subTask, int id){
-        Epic relatedEpic = getEpicById(subTask.getEpicId());
-
         subTask.setId(id);
-        createSubTask(subTask);
-        relatedEpic.updateSubTask(subTask);
+        SubTask oldSubTask = getSubTaskById(id);
+        Epic oldEpic = getEpicById(oldSubTask.getEpicId());
+        Epic newEpic = getEpicById(subTask.getEpicId());
+
+        if (newEpic.equals(oldEpic)){
+            newEpic.updateSubTask(subTask);
+        } else {
+            oldEpic.unlinkSubTask(id);
+            newEpic.addSubTask(id, subTask.getStatus());
+        }
+        allSubTasks.remove(id);
+        allSubTasks.put(id, subTask);
     }
 
     public void removeTaskById(int id){
@@ -138,7 +152,7 @@ public class TaskManager {
         if (allSubTasks.containsKey(id)){
             SubTask subTask = getSubTaskById(id);
             Epic epic = getEpicById(subTask.getEpicId());
-            epic.removeSubTask(id);
+            epic.unlinkSubTask(id);
             allSubTasks.remove(id);
         } else {
             throw new IllegalArgumentException("Невозможно удалить подзадачу id "
