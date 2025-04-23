@@ -1,11 +1,7 @@
 package app;
 
-import model.Epic;
-import model.Status;
-import model.SubTask;
-import model.Task;
-import service.IdGenerator;
-import service.TaskManager;
+import model.*;
+import service.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -51,8 +47,8 @@ public class Main {
     }
 
     public static void printAllTasks(TaskManager taskManager) {
-        System.out.println(taskManager.getAllTasksList());
-        System.out.println(taskManager.getAllEpicsList());
-        System.out.println(taskManager.getAllSubTasksList());
+        System.out.println(taskManager.getTasks());
+        System.out.println(taskManager.getEpics());
+        System.out.println(taskManager.getSubTasks());
     }
 }

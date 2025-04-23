@@ -1,14 +1,8 @@
 package service;
 
-import model.Epic;
-import model.Status;
-import model.SubTask;
-import model.Task;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import model.*;
 
 public class TaskManager {
     private final Map<Integer, Task> allTasks = new HashMap<>();
@@ -20,15 +14,15 @@ public class TaskManager {
         this.idGenerator = idGenerator;
     }
 
-    public List<Task> getAllTasksList() {
+    public List<Task> getTasks() {
         return new ArrayList<>(allTasks.values());
     }
 
-    public List<Epic> getAllEpicsList() {
+    public List<Epic> getEpics() {
         return new ArrayList<>(allEpics.values());
     }
 
-    public List<SubTask> getAllSubTasksList() {
+    public List<SubTask> getSubTasks() {
         return new ArrayList<>(allSubTasks.values());
     }
 
@@ -42,7 +36,7 @@ public class TaskManager {
     }
 
     public void removeAllSubTasks() {
-        List<Epic> epics = getAllEpicsList();
+        List<Epic> epics = getEpics();
 
         for (Epic epic : epics) {
             epic.unlinkAllSubtasks();

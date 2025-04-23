@@ -1,9 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Epic extends Task {
     private Map<Integer, Status> relatedSubTaskMap = new HashMap<>();
@@ -55,7 +52,9 @@ public class Epic extends Task {
         boolean isAllNew = true;
         boolean isAllDone = true;
 
-        if (relatedSubTaskMap.isEmpty()) return Status.NEW;
+        if (relatedSubTaskMap.isEmpty()) {
+            return Status.NEW;
+        }
         for (Status status : relatedSubTaskMap.values()) {
             if (status != Status.NEW) {
                 isAllNew = false;
@@ -65,9 +64,14 @@ public class Epic extends Task {
             }
         }
 
-        if (isAllNew) return Status.NEW;
-        if (isAllDone) return Status.DONE;
-        else return Status.IN_PROGRESS;
+        if (isAllNew) {
+            return Status.NEW;
+        }
+        if (isAllDone) {
+            return Status.DONE;
+        } else {
+            return Status.IN_PROGRESS;
+        }
     }
 
     @Override
