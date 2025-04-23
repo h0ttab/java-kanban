@@ -3,7 +3,7 @@ package service;
 public class IdGenerator {
     private int id = 1;
 
-    public int generateUniqueId(){
+    public int generateId(){
         return id++;
     }
 }

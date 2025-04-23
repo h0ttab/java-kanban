@@ -79,22 +79,22 @@ public class TaskManager {
     }
 
     public void createTask(Task task) {
-        int newId = idGenerator.generateUniqueId();
+        int newId = idGenerator.generateId();
 
         task.setId(newId);
         allTasks.put(newId, task);
     }
 
     public void createEpic(Epic epic) {
-        int newId = idGenerator.generateUniqueId();
+        int newId = idGenerator.generateId();
 
         epic.setId(newId);
         allEpics.put(newId, epic);
     }
 
     public void createSubTask(SubTask subTask) {
+        int newId = idGenerator.generateId();
         Epic relatedEpic = getEpicById(subTask.getEpicId());
-        int newId = idGenerator.generateUniqueId();
 
         subTask.setId(newId);
         relatedEpic.addSubTask(subTask.getId(), subTask.getStatus());
