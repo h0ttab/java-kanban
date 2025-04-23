@@ -150,7 +150,7 @@ public class TaskManager {
             allTasks.remove(id);
         } else {
             throw new IllegalArgumentException("Невозможно удалить задачу id "
-                    + id + "по id: задача не найдена.");
+                    + id + " по id: задача не найдена.");
         }
     }
 
@@ -165,7 +165,7 @@ public class TaskManager {
             allEpics.remove(id);
         } else {
             throw new IllegalArgumentException("Невозможно удалить эпик id "
-                    + id + "по id: эпик не найден.");
+                    + id + " по id: эпик не найден.");
         }
     }
 
@@ -178,7 +178,7 @@ public class TaskManager {
             allSubTasks.remove(id);
         } else {
             throw new IllegalArgumentException("Невозможно удалить подзадачу id "
-                    + id + "по id: подзадача не найдена.");
+                    + id + " по id: подзадача не найдена.");
         }
     }
 }
