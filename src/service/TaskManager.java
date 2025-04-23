@@ -14,6 +14,11 @@ public class TaskManager {
     private final Map<Integer, Task> allTasks = new HashMap<>();
     private final Map<Integer, Epic> allEpics = new HashMap<>();
     private final Map<Integer, SubTask> allSubTasks = new HashMap<>();
+    private final IdGenerator idGenerator;
+
+    public TaskManager(IdGenerator idGenerator){
+        this.idGenerator = idGenerator;
+    }
 
     public List<Task> getAllTasksList() {
         return new ArrayList<>(allTasks.values());
@@ -80,16 +85,24 @@ public class TaskManager {
     }
 
     public void createTask(Task task) {
-        allTasks.put(task.getId(), task);
+        int newId = idGenerator.generateUniqueId();
+
+        task.setId(newId);
+        allTasks.put(newId, task);
     }
 
     public void createEpic(Epic epic) {
-        allEpics.put(epic.getId(), epic);
+        int newId = idGenerator.generateUniqueId();
+
+        epic.setId(newId);
+        allEpics.put(newId, epic);
     }
 
     public void createSubTask(SubTask subTask) {
         Epic relatedEpic = getEpicById(subTask.getEpicId());
+        int newId = idGenerator.generateUniqueId();
 
+        subTask.setId(newId);
         relatedEpic.addSubTask(subTask.getId(), subTask.getStatus());
         allSubTasks.put(subTask.getId(), subTask);
     }
@@ -104,11 +117,12 @@ public class TaskManager {
     }
 
     public void updateEpic(Epic epic, int id) {
-        Map<Integer, Status> subTasksMapBuffer = getEpicById(id).getRelatedSubTaskMap();
+        Epic epicOld = getEpicById(id);
+        Map<Integer, Status> bufferedMap = new HashMap<>(epicOld.getRelatedSubTaskMap());
 
-        epic.setRelatedSubTaskMap(subTasksMapBuffer);
+        epic.setRelatedSubTaskMap(bufferedMap);
         epic.setId(id);
-        createEpic(epic);
+        allEpics.put(id, epic);
     }
 
     public void updateSubTask(SubTask subTask, int id) {

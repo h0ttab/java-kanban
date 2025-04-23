@@ -1,10 +1,9 @@
 package model;
 
 import java.util.Objects;
-import service.IdGenerator;
 
 public class Task {
-    private int id = IdGenerator.generateUniqueId();
+    private int id;
     private String title;
     private String description;
     private Status status;

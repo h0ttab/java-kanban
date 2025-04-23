@@ -4,11 +4,12 @@ import model.Epic;
 import model.Status;
 import model.SubTask;
 import model.Task;
+import service.IdGenerator;
 import service.TaskManager;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = new TaskManager(new IdGenerator());
 
         taskManager.createTask(
                 new Task("Обычная задача 1", "Описание обычной задачи 1", Status.NEW)

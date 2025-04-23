@@ -1,9 +1,9 @@
 package service;
 
 public class IdGenerator {
-    private static int id = 1;
+    private int id = 1;
 
-    public static int generateUniqueId(){
+    public int generateUniqueId(){
         return id++;
     }
 }
