@@ -125,7 +125,6 @@ public class TaskManager {
                 oldEpic.unlinkSubTask(id);
                 newEpic.addSubTask(id, subTask.getStatus());
             }
-
             allSubTasks.put(id, subTask);
         } else {
             throw new IllegalArgumentException("Ошибка обновления подзадачи id " + id + " - подзадача не найдена");
@@ -149,7 +148,6 @@ public class TaskManager {
             for (Integer subTaskId : relatedSubTasks) {
                 removeSubTaskById(subTaskId);
             }
-
             allEpics.remove(id);
         } else {
             throw new IllegalArgumentException("Невозможно удалить эпик id "
