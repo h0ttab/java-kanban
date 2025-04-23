@@ -93,8 +93,8 @@ public class TaskManager {
     }
 
     public void createSubTask(SubTask subTask) {
-        Epic relatedEpic = getEpicById(subTask.getEpicId());
         int newId = idGenerator.generateUniqueId();
+        Epic relatedEpic = getEpicById(subTask.getEpicId());
 
         subTask.setId(newId);
         relatedEpic.addSubTask(subTask.getId(), subTask.getStatus());
