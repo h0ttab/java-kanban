@@ -30,7 +30,6 @@ public class Main {
                 "Описание подзадачи 2 эпика 1", Status.NEW, epic2.getId()));
 
         printAllTasks(taskManager);
-        System.out.println();
 
         taskManager.updateTask(new Task("Обычная задача 1", "Описание обычной задачи 1", Status.DONE)
                 , 1);
@@ -38,7 +37,6 @@ public class Main {
                 "Описание подзадачи 1 эпика 1", Status.DONE, epic1.getId()), 4);
 
         printAllTasks(taskManager);
-        System.out.println();
 
         taskManager.removeTaskById(2);
         taskManager.removeSubTaskById(5);
@@ -50,5 +48,6 @@ public class Main {
         System.out.println(taskManager.getTasks());
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubTasks());
+        System.out.println();
     }
 }
