@@ -14,32 +14,6 @@ public class Task {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + getId() +
-                ", title='" + getTitle() + '\'' +
-                ", description.length='" + getDescription().length() + '\'' +
-                ", status=" + getStatus() +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (!(object instanceof Task task)) {
-            return false;
-        }
-        return id == task.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
     public int getId() {
         return id;
     }
@@ -70,5 +44,31 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", description.length='" + getDescription().length() + '\'' +
+                ", status=" + getStatus() +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Task task)) {
+            return false;
+        }
+        return id == task.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

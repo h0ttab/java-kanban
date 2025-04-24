@@ -3,10 +3,11 @@ package model;
 import java.util.*;
 
 public class Epic extends Task {
-    private Map<Integer, Status> relatedSubTaskMap = new HashMap<>();
+    private Map<Integer, Status> relatedSubTaskMap;
 
     public Epic(String title, String description) {
         super(title, description, Status.NEW);
+        relatedSubTaskMap = new HashMap<>();
     }
 
     public List<Integer> getSubTaskIdList() {
