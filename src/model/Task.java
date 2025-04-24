@@ -61,10 +61,18 @@ public class Task {
         if (this == object) {
             return true;
         }
-        if (!(object instanceof Task task)) {
+        if (object == null) {
             return false;
         }
-        return id == task.id;
+        if (this.getClass() != object.getClass()) {
+            return false;
+        }
+
+        Task task = (Task) object;
+        return (this.id == task.id
+                && Objects.equals(this.title, task.title)
+                && Objects.equals(this.description, task.description)
+                && this.status == task.status);
     }
 
     @Override

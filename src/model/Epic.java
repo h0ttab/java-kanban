@@ -96,4 +96,24 @@ public class Epic extends Task {
     public int hashCode() {
         return Objects.hash(super.hashCode(), getRelatedSubTaskMap());
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null) {
+            return false;
+        }
+        if (this.getClass() != object.getClass()) {
+            return false;
+        }
+
+        Epic epic = (Epic) object;
+        return this.relatedSubTaskMap.equals(epic.relatedSubTaskMap)
+                && this.getId() == epic.getId()
+                && Objects.equals(this.getTitle(), epic.getTitle())
+                && Objects.equals(this.getDescription(), epic.getDescription())
+                && this.getStatus() == epic.getStatus();
+    }
 }
