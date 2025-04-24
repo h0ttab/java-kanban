@@ -47,16 +47,17 @@ public class TaskManager {
     public Task getTaskById(int id) {
         if (allTasks.containsKey(id)) {
             return allTasks.get(id);
-        } else {
-            throw new IllegalArgumentException("Задачи с id " + id + " не существует");
         }
+        System.out.println("Ошибка при вызове getTaskById(int id): Задачи с id " + id + " не существует");
+        return null;
     }
 
     public Epic getEpicById(int id) {
         if (allEpics.containsKey(id)) {
             return allEpics.get(id);
         } else {
-            throw new IllegalArgumentException("Эпика с id " + id + " не существует");
+            System.out.println("Ошибка при вызове getEpicById(int id): Эпика с id " + id + " не существует");
+            return null;
         }
     }
 
@@ -64,7 +65,8 @@ public class TaskManager {
         if (allSubTasks.containsKey(id)) {
             return allSubTasks.get(id);
         } else {
-            throw new IllegalArgumentException("Подзадачи с id " + id + " не существует");
+            System.out.println("Ошибка при вызове getSubTaskById(int id): Подзадачи с id " + id + " не существует");
+            return null;
         }
     }
 
@@ -106,7 +108,7 @@ public class TaskManager {
             task.setId(id);
             allTasks.put(id, task);
         } else {
-            throw new IllegalArgumentException("Ошибка обновления задачи id " + id + " - задача не найдена");
+            System.out.println("Ошибка при вызове updateTask(Task task, int id): Ошибка обновления задачи id " + id + " - задача не найдена");
         }
     }
 
@@ -135,7 +137,7 @@ public class TaskManager {
             }
             allSubTasks.put(id, subTask);
         } else {
-            throw new IllegalArgumentException("Ошибка обновления подзадачи id " + id + " - подзадача не найдена");
+            System.out.println("Ошибка при вызове updateSubTask(SubTask subTask, int id): Ошибка обновления подзадачи id " + id + " - подзадача не найдена");
         }
     }
 
@@ -143,7 +145,7 @@ public class TaskManager {
         if (allTasks.containsKey(id)) {
             allTasks.remove(id);
         } else {
-            throw new IllegalArgumentException("Невозможно удалить задачу id "
+            System.out.println("Ошибка при вызове removeTaskById(int id): Невозможно удалить задачу id "
                     + id + " по id: задача не найдена.");
         }
     }
@@ -158,8 +160,8 @@ public class TaskManager {
             }
             allEpics.remove(id);
         } else {
-            throw new IllegalArgumentException("Невозможно удалить эпик id "
-                    + id + " по id: эпик не найден.");
+            throw new IllegalArgumentException("Ошибка при вызове removeEpicById(int id): Невозможно удалить эпик id "
+                    + id + " по id - эпик не найден.");
         }
     }
 
@@ -171,7 +173,7 @@ public class TaskManager {
             epic.unlinkSubTask(id);
             allSubTasks.remove(id);
         } else {
-            throw new IllegalArgumentException("Невозможно удалить подзадачу id "
+            System.out.println("Ошибка при вызове removeSubTaskById(int id): Невозможно удалить подзадачу id "
                     + id + " по id: подзадача не найдена.");
         }
     }

@@ -30,7 +30,7 @@ public class Epic extends Task {
         if (relatedSubTaskMap.containsKey(id)) {
             relatedSubTaskMap.remove(id);
         } else {
-            throw new IllegalArgumentException("В эпике id " + getId()
+            System.out.println("Ошибка при вызове unlinkSubTask(int id): В эпике id " + getId()
                     + " не найдена связанная подзадача с id " + id);
         }
     }
@@ -43,7 +43,7 @@ public class Epic extends Task {
         if (relatedSubTaskMap.containsKey(subTask.getId())) {
             relatedSubTaskMap.put(subTask.getId(), subTask.getStatus());
         } else {
-            throw new IllegalArgumentException("В эпике id " + getId()
+            System.out.println("Ошибка при вызове updateSubTask(SubTask subTask): В эпике id " + getId()
                     + " не найдена связанная подзадача с id " + subTask.getId());
         }
     }
@@ -77,7 +77,7 @@ public class Epic extends Task {
 
     @Override
     public void setStatus(Status status) {
-        throw new UnsupportedOperationException("Ошибка изменения статуса: "
+        System.out.println("Ошибка изменения статуса: "
                 + "для эпиков ручное изменение статуса запрещено");
     }
 
