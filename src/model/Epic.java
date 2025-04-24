@@ -91,4 +91,9 @@ public class Epic extends Task {
                 ", status=" + getStatus() +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getRelatedSubTaskMap());
+    }
 }
