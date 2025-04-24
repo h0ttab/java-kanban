@@ -99,21 +99,17 @@ public class Epic extends Task {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
         if (object == null) {
             return false;
         }
         if (this.getClass() != object.getClass()) {
             return false;
         }
+        if (!super.equals(object)) {
+            return false;
+        }
 
         Epic epic = (Epic) object;
-        return this.relatedSubTaskMap.equals(epic.relatedSubTaskMap)
-                && this.getId() == epic.getId()
-                && Objects.equals(this.getTitle(), epic.getTitle())
-                && Objects.equals(this.getDescription(), epic.getDescription())
-                && this.getStatus() == epic.getStatus();
+        return this.relatedSubTaskMap.equals(epic.relatedSubTaskMap);
     }
 }

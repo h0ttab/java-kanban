@@ -32,21 +32,17 @@ public class SubTask extends Task {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
         if (object == null) {
             return false;
         }
         if (this.getClass() != object.getClass()){
             return false;
         }
+        if (!super.equals(object)) {
+            return false;
+        }
 
         SubTask subTask = (SubTask) object;
-        return this.epicId == subTask.epicId
-                && this.getId() == subTask.getId()
-                && Objects.equals(this.getTitle(), subTask.getTitle())
-                && Objects.equals(this.getDescription(), subTask.getDescription())
-                && this.getStatus() == subTask.getStatus();
+        return this.epicId == subTask.epicId;
     }
 }

@@ -72,7 +72,7 @@ public class Task {
         return (this.id == task.id
                 && Objects.equals(this.title, task.title)
                 && Objects.equals(this.description, task.description)
-                && this.status == task.status);
+                && this.getStatus() == task.getStatus());
     }
 
     @Override
