@@ -1,180 +1,47 @@
 package service;
 
-import java.util.*;
+import model.Epic;
+import model.SubTask;
+import model.Task;
 
-import model.*;
+import java.util.List;
 
-public class TaskManager {
-    private final Map<Integer, Task> allTasks = new HashMap<>();
-    private final Map<Integer, Epic> allEpics = new HashMap<>();
-    private final Map<Integer, SubTask> allSubTasks = new HashMap<>();
-    private final IdGenerator idGenerator;
+public interface TaskManager {
+    List<Task> getTasks();
 
-    public TaskManager(IdGenerator idGenerator){
-        this.idGenerator = idGenerator;
-    }
+    List<Epic> getEpics();
 
-    public List<Task> getTasks() {
-        return new ArrayList<>(allTasks.values());
-    }
+    List<SubTask> getSubTasks();
 
-    public List<Epic> getEpics() {
-        return new ArrayList<>(allEpics.values());
-    }
+    void removeAllTasks();
 
-    public List<SubTask> getSubTasks() {
-        return new ArrayList<>(allSubTasks.values());
-    }
+    void removeAllEpics();
 
-    public void removeAllTasks() {
-        allTasks.clear();
-    }
+    void removeAllSubTasks();
 
-    public void removeAllEpics() {
-        removeAllSubTasks();
-        allEpics.clear();
-    }
+    Task getTaskById(int id);
 
-    public void removeAllSubTasks() {
-        List<Epic> epics = getEpics();
+    Epic getEpicById(int id);
 
-        for (Epic epic : epics) {
-            epic.unlinkAllSubtasks();
-        }
-        allSubTasks.clear();
-    }
+    SubTask getSubTaskById(int id);
 
-    public Task getTaskById(int id) {
-        if (allTasks.containsKey(id)) {
-            return allTasks.get(id);
-        }
-        System.out.println("Ошибка при вызове getTaskById(int id): Задачи с id " + id + " не существует");
-        return null;
-    }
+    List<SubTask> getAllSubTasksOfEpic(int id);
 
-    public Epic getEpicById(int id) {
-        if (allEpics.containsKey(id)) {
-            return allEpics.get(id);
-        } else {
-            System.out.println("Ошибка при вызове getEpicById(int id): Эпика с id " + id + " не существует");
-            return null;
-        }
-    }
+    void createTask(Task task);
 
-    public SubTask getSubTaskById(int id) {
-        if (allSubTasks.containsKey(id)) {
-            return allSubTasks.get(id);
-        } else {
-            System.out.println("Ошибка при вызове getSubTaskById(int id): Подзадачи с id " + id + " не существует");
-            return null;
-        }
-    }
+    void createEpic(Epic epic);
 
-    public List<SubTask> getAllSubTasksOfEpic(int id) {
-        List<SubTask> subTaskList = new ArrayList<>();
-        Epic epic = getEpicById(id);
+    void createSubTask(SubTask subTask);
 
-        for (Integer subTaskId : epic.getSubTaskIdList()) {
-            subTaskList.add(getSubTaskById(subTaskId));
-        }
-        return subTaskList;
-    }
+    void updateTask(Task task, int id);
 
-    public void createTask(Task task) {
-        int newId = idGenerator.generateId();
+    void updateEpic(Epic epic, int id);
 
-        task.setId(newId);
-        allTasks.put(newId, task);
-    }
+    void updateSubTask(SubTask subTask, int id);
 
-    public void createEpic(Epic epic) {
-        int newId = idGenerator.generateId();
+    void removeTaskById(int id);
 
-        epic.setId(newId);
-        allEpics.put(newId, epic);
-    }
+    void removeEpicById(int id);
 
-    public void createSubTask(SubTask subTask) {
-        int newId = idGenerator.generateId();
-        Epic relatedEpic = getEpicById(subTask.getEpicId());
-
-        subTask.setId(newId);
-        relatedEpic.addSubTask(subTask.getId(), subTask.getStatus());
-        allSubTasks.put(subTask.getId(), subTask);
-    }
-
-    public void updateTask(Task task, int id) {
-        if (allTasks.containsKey(id)) {
-            task.setId(id);
-            allTasks.put(id, task);
-        } else {
-            System.out.println("Ошибка при вызове updateTask(Task task, int id): Ошибка обновления задачи id " + id + " - задача не найдена");
-        }
-    }
-
-    public void updateEpic(Epic epic, int id) {
-        Epic epicOld = getEpicById(id);
-        Map<Integer, Status> bufferedMap = new HashMap<>(epicOld.getRelatedSubTaskMap());
-
-        epic.setRelatedSubTaskMap(bufferedMap);
-        epic.setId(id);
-        allEpics.put(id, epic);
-    }
-
-    public void updateSubTask(SubTask subTask, int id) {
-        if (allSubTasks.containsKey(id)) {
-            SubTask oldSubTask = getSubTaskById(id);
-            Epic oldEpic = getEpicById(oldSubTask.getEpicId());
-            Epic newEpic = getEpicById(subTask.getEpicId());
-
-            subTask.setId(id);
-
-            if (newEpic.equals(oldEpic)) {
-                newEpic.updateSubTask(subTask);
-            } else {
-                oldEpic.unlinkSubTask(id);
-                newEpic.addSubTask(id, subTask.getStatus());
-            }
-            allSubTasks.put(id, subTask);
-        } else {
-            System.out.println("Ошибка при вызове updateSubTask(SubTask subTask, int id): Ошибка обновления подзадачи id " + id + " - подзадача не найдена");
-        }
-    }
-
-    public void removeTaskById(int id) {
-        if (allTasks.containsKey(id)) {
-            allTasks.remove(id);
-        } else {
-            System.out.println("Ошибка при вызове removeTaskById(int id): Невозможно удалить задачу id "
-                    + id + " по id: задача не найдена.");
-        }
-    }
-
-    public void removeEpicById(int id) {
-        if (allEpics.containsKey(id)) {
-            Epic epic = getEpicById(id);
-            List<Integer> relatedSubTasks = epic.getSubTaskIdList();
-
-            for (Integer subTaskId : relatedSubTasks) {
-                removeSubTaskById(subTaskId);
-            }
-            allEpics.remove(id);
-        } else {
-            throw new IllegalArgumentException("Ошибка при вызове removeEpicById(int id): Невозможно удалить эпик id "
-                    + id + " по id - эпик не найден.");
-        }
-    }
-
-    public void removeSubTaskById(int id) {
-        if (allSubTasks.containsKey(id)) {
-            SubTask subTask = getSubTaskById(id);
-            Epic epic = getEpicById(subTask.getEpicId());
-
-            epic.unlinkSubTask(id);
-            allSubTasks.remove(id);
-        } else {
-            System.out.println("Ошибка при вызове removeSubTaskById(int id): Невозможно удалить подзадачу id "
-                    + id + " по id: подзадача не найдена.");
-        }
-    }
+    void removeSubTaskById(int id);
 }
