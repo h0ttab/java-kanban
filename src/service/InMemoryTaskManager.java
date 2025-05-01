@@ -15,6 +15,10 @@ public class InMemoryTaskManager implements TaskManager {
         this.idGenerator = idGenerator;
     }
 
+    public Deque<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
     @Override
     public List<Task> getTasks() {
         return new ArrayList<>(allTasks.values());

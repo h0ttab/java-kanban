@@ -42,6 +42,8 @@ public class Main {
         taskManager.removeSubTaskById(5);
 
         printAllTasks(taskManager);
+
+
     }
 
     public static void printAllTasks(TaskManager taskManager) {
