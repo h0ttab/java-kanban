@@ -22,8 +22,14 @@ public class Epic extends Task {
         return relatedSubTaskMap;
     }
 
-    public void addSubTask(int id, Status status) {
+    public Integer addSubTask(int id, Status status) {
+        if (id == getId()) {
+            System.out.println("Ошибка при вызове addSubTask(int id, Status status): Нельзя добавить эпик в качестве "
+                    + "своей подзадачи.");
+            return null;
+        }
         relatedSubTaskMap.put(id, status);
+        return id;
     }
 
     public void unlinkSubTask(int id) {
