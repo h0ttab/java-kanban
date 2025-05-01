@@ -1,11 +1,8 @@
 package service;
 
-import model.Epic;
-import model.SubTask;
-import model.Task;
+import model.*;
 
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 public interface TaskManager {
     Deque<Task> getHistory();
