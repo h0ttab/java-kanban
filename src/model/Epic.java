@@ -14,12 +14,12 @@ public class Epic extends Task {
         return new ArrayList<>(relatedSubTaskMap.keySet());
     }
 
-    public void setRelatedSubTaskMap(Map<Integer, Status> relatedSubTaskMap) {
-        this.relatedSubTaskMap = relatedSubTaskMap;
-    }
-
     public Map<Integer, Status> getRelatedSubTaskMap() {
         return relatedSubTaskMap;
+    }
+
+    public void setRelatedSubTaskMap(Map<Integer, Status> relatedSubTaskMap) {
+        this.relatedSubTaskMap = relatedSubTaskMap;
     }
 
     public Integer addSubTask(int id, Status status) {

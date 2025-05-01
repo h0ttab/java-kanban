@@ -35,7 +35,7 @@ public class SubTask extends Task {
         if (object == null) {
             return false;
         }
-        if (this.getClass() != object.getClass()){
+        if (this.getClass() != object.getClass()) {
             return false;
         }
         if (!super.equals(object)) {

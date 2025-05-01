@@ -1,9 +1,7 @@
 package model;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import service.Managers;
-import service.TaskManager;
+import org.junit.jupiter.api.*;
+import service.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

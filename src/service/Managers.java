@@ -4,7 +4,9 @@ public class Managers {
 
     public static TaskManager getDefault() {
         IdGenerator idGenerator = new IdGenerator();
-        return new InMemoryTaskManager(idGenerator);
+        HistoryManager historyManager = getDefaultHistory();
+
+        return new InMemoryTaskManager(idGenerator, historyManager);
     }
 
     public static HistoryManager getDefaultHistory() {

@@ -1,21 +1,22 @@
 package service;
 
-import java.util.*;
-
 import model.*;
+
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> allTasks = new HashMap<>();
     private final Map<Integer, Epic> allEpics = new HashMap<>();
     private final Map<Integer, SubTask> allSubTasks = new HashMap<>();
     private final IdGenerator idGenerator;
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    private final HistoryManager historyManager;
 
-    public InMemoryTaskManager(IdGenerator idGenerator){
+    public InMemoryTaskManager(IdGenerator idGenerator, HistoryManager historyManager) {
         this.idGenerator = idGenerator;
+        this.historyManager = historyManager;
     }
 
-    private int generateUniqueId(Map<Integer,?> storage) {
+    private int generateUniqueId(Map<Integer, ?> storage) {
         int id;
         do {
             id = idGenerator.generateId();

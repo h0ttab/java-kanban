@@ -1,9 +1,7 @@
 package service;
 
 import model.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
@@ -33,7 +31,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    @DisplayName("Класс InMemoryHistoryManager корректно ограничивает свой размер в 10 элементов")
+    @DisplayName("Класс InMemoryHistoryManager корректно ограничивает размер истории в 10 элементов")
     void shouldNotOverflowSizeOf10() {
         for (int i = 0; i < 11; i++) {
             historyManager.addTask(task);
@@ -51,10 +49,12 @@ public class InMemoryHistoryManagerTest {
             historyManager.addTask(task);
         }
         historyManager.addTask(epic);
+
         assertEquals(subTask, historyManager.getHistory().getFirst());
         assertEquals(epic, historyManager.getHistory().getLast());
 
         historyManager.addTask(subTask);
+
         assertEquals(task, historyManager.getHistory().getFirst());
         assertEquals(subTask, historyManager.getHistory().getLast());
     }
