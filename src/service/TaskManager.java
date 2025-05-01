@@ -4,9 +4,12 @@ import model.Epic;
 import model.SubTask;
 import model.Task;
 
+import java.util.Deque;
 import java.util.List;
 
 public interface TaskManager {
+    Deque<Task> getHistory();
+
     List<Task> getTasks();
 
     List<Epic> getEpics();
