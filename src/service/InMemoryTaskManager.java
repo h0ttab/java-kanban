@@ -15,6 +15,14 @@ public class InMemoryTaskManager implements TaskManager {
         this.idGenerator = idGenerator;
     }
 
+    private int generateUniqueId(Map<Integer,?> storage) {
+        int id;
+        do {
+            id = idGenerator.generateId();
+        } while (storage.containsKey(id));
+        return id;
+    }
+
     @Override
     public Deque<Task> getHistory() {
         return historyManager.getHistory();
@@ -104,8 +112,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createTask(Task task) {
-        int newId = idGenerator.generateId();
-
+        int newId = generateUniqueId(allTasks);
         task.setId(newId);
         allTasks.put(newId, task);
 
@@ -114,8 +121,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createEpic(Epic epic) {
-        int newId = idGenerator.generateId();
-
+        int newId = generateUniqueId(allEpics);
         epic.setId(newId);
         allEpics.put(newId, epic);
 
@@ -124,12 +130,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubTask(SubTask subTask) {
-        int newId = idGenerator.generateId();
-        Epic relatedEpic = getEpicById(subTask.getEpicId());
-
+        int newId = generateUniqueId(allSubTasks);
         subTask.setId(newId);
+
+        Epic relatedEpic = getEpicById(subTask.getEpicId());
         relatedEpic.addSubTask(subTask.getId(), subTask.getStatus());
-        allSubTasks.put(subTask.getId(), subTask);
+        allSubTasks.put(newId, subTask);
 
         return newId;
     }
