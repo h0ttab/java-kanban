@@ -3,6 +3,10 @@ package app;
 import model.*;
 import service.*;
 
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
@@ -43,6 +47,20 @@ public class Main {
 
         printAllTasks(taskManager);
 
+        printHistoryIdOnly(taskManager);
+
+        taskManager.getTaskById(1);
+        printHistoryIdOnly(taskManager);
+        taskManager.getEpicById(3);
+        printHistoryIdOnly(taskManager);
+        taskManager.getSubTaskById(7);
+        printHistoryIdOnly(taskManager);
+        taskManager.getSubTaskById(7);
+        printHistoryIdOnly(taskManager);
+        taskManager.getTaskById(1);
+        printHistoryIdOnly(taskManager);
+        taskManager.getEpicById(3);
+        printHistoryIdOnly(taskManager);
 
     }
 
@@ -51,5 +69,16 @@ public class Main {
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubTasks());
         System.out.println();
+    }
+
+    public static void printHistoryIdOnly(TaskManager taskManager) {
+        Deque<Task> history = taskManager.getHistory();
+        List<Integer> ids = new ArrayList<>();
+
+        for (Task task : history) {
+            ids.add(task.getId());
+        }
+
+        System.out.println(ids);
     }
 }
