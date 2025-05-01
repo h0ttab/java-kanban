@@ -11,7 +11,7 @@ public class ManagersTest {
 
     @Test
     @DisplayName("Класс Managers возвращает корректно работающий экземпляр менеджера задач")
-    void shouldReturnCorrectlyInitializedTaskManager() throws NoSuchFieldException {
+    void shouldReturnCorrectlyInitializedTaskManager() {
         TaskManager taskManager = Managers.getDefault();
         assertNotNull(taskManager.getTasks());
         assertEquals(new ArrayList<Task>(), taskManager.getTasks());
