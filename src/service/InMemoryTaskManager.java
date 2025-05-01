@@ -9,6 +9,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Epic> allEpics = new HashMap<>();
     private final Map<Integer, SubTask> allSubTasks = new HashMap<>();
     private final IdGenerator idGenerator;
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     public InMemoryTaskManager(IdGenerator idGenerator){
         this.idGenerator = idGenerator;
@@ -53,7 +54,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         if (allTasks.containsKey(id)) {
-            return allTasks.get(id);
+            Task task = allTasks.get(id);
+            historyManager.addTask(task);
+            return task;
         }
         System.out.println("Ошибка при вызове getTaskById(int id): Задачи с id " + id + " не существует");
         return null;
@@ -62,7 +65,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int id) {
         if (allEpics.containsKey(id)) {
-            return allEpics.get(id);
+            Epic epic = allEpics.get(id);
+            historyManager.addTask(epic);
+            return epic;
         } else {
             System.out.println("Ошибка при вызове getEpicById(int id): Эпика с id " + id + " не существует");
             return null;
@@ -72,7 +77,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public SubTask getSubTaskById(int id) {
         if (allSubTasks.containsKey(id)) {
-            return allSubTasks.get(id);
+            SubTask subTask = allSubTasks.get(id);
+            historyManager.addTask(subTask);
+            return subTask;
         } else {
             System.out.println("Ошибка при вызове getSubTaskById(int id): Подзадачи с id " + id + " не существует");
             return null;

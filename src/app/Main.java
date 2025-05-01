@@ -5,7 +5,7 @@ import service.*;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = new InMemoryTaskManager(new IdGenerator());
+        TaskManager taskManager = Managers.getDefault();
 
         taskManager.createTask(
                 new Task("Обычная задача 1", "Описание обычной задачи 1", Status.NEW)
