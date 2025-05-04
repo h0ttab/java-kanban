@@ -8,4 +8,6 @@ public interface HistoryManager {
     void addTask(Task task);
 
     Deque<Task> getHistory();
+
+    int getHistoryMaxSize();
 }

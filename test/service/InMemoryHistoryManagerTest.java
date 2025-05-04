@@ -5,17 +5,19 @@ import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryHistoryManagerTest {
     private HistoryManager historyManager;
-    private final Task task = new Task("Задача", "Описание задачи", Status.NEW);
-    private final Epic epic = new Epic("Эпик", "Описание эпика");
-    private final SubTask subTask = new SubTask("Подзадача", "Описание подзадачи",
+    private static final int HISTORY_MAX_SIZE = Managers.getDefaultHistory().getHistoryMaxSize();
+
+    private static final Task task = new Task("Задача", "Описание задачи", Status.NEW);
+    private static final Epic epic = new Epic("Эпик", "Описание эпика");
+    private static final SubTask subTask = new SubTask("Подзадача", "Описание подзадачи",
             Status.DONE, 2);
 
     @BeforeEach
-    void initEnv(){
+    void initHistoryManager() {
         historyManager = Managers.getDefaultHistory();
     }
 
@@ -26,26 +28,24 @@ public class InMemoryHistoryManagerTest {
         historyManager.addTask(epic);
         historyManager.addTask(subTask);
 
-        Deque <Task> expectedHistory = new LinkedList<>(List.of(task, epic, subTask));
+        Deque<Task> expectedHistory = new LinkedList<>(List.of(task, epic, subTask));
         assertEquals(expectedHistory, historyManager.getHistory());
     }
 
     @Test
-    @DisplayName("Класс InMemoryHistoryManager корректно ограничивает размер истории в 10 элементов")
-    void shouldNotOverflowSizeOf10() {
-        for (int i = 0; i < 11; i++) {
+    @DisplayName("Класс InMemoryHistoryManager корректно ограничивает размер истории просмотров задач")
+    void shouldNotOverflowHistorySize() {
+        for (int i = 0; i < HISTORY_MAX_SIZE + 1; i++) {
             historyManager.addTask(task);
         }
-
-        int expectedHistorySize = 10;
-        assertEquals(expectedHistorySize, historyManager.getHistory().size());
+        assertEquals(HISTORY_MAX_SIZE, historyManager.getHistory().size());
     }
 
     @Test
     @DisplayName("Класс InMemoryHistoryManager корректно размещает элементы по принципу first in - first out")
     void shouldFollowFIFOOrder() {
         historyManager.addTask(subTask);
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < HISTORY_MAX_SIZE - 2; i++) {
             historyManager.addTask(task);
         }
         historyManager.addTask(epic);
