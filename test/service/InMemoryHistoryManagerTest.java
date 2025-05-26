@@ -23,11 +23,14 @@ public class InMemoryHistoryManagerTest {
     @Test
     @DisplayName("Класс InMemoryHistoryManager корректно добавляет задачи в историю просмотров")
     void shouldAddTasksToHistory() {
+        task.setId(1);
+        epic.setId(2);
+        subTask.setId(3);
         historyManager.addTask(task);
         historyManager.addTask(epic);
         historyManager.addTask(subTask);
 
-        Deque<Task> expectedHistory = new LinkedList<>(List.of(task, epic, subTask));
+        List<Task> expectedHistory = new LinkedList<>(List.of(task, epic, subTask));
         assertEquals(expectedHistory, historyManager.getHistory());
     }
 }
