@@ -5,16 +5,62 @@ import service.*;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = Managers.getDefault();
-        Task task = new Task("Задача", "Описание задачи", Status.NEW);
-        Epic epic = new Epic("Эпик", "Описание эпика");
-        SubTask subTask = new SubTask("Подзадача", "Описание подзадачи",
-                Status.DONE, 2);
+        TaskManager manager = getTaskManager();
 
-        manager.createTask(task);
-        manager.createEpic(epic);
-        manager.createSubTask(subTask);
-        printAllTasks(manager);
+        manager.getTaskById(2);
+        System.out.println(manager.getHistory());
+
+        manager.getEpicById(4);
+        System.out.println(manager.getHistory());
+
+        manager.getSubTaskById(6);
+        System.out.println(manager.getHistory());
+
+        manager.getTaskById(2);
+        System.out.println(manager.getHistory());
+
+        manager.getSubTaskById(7);
+        System.out.println(manager.getHistory());
+
+        manager.getSubTaskById(6);
+        System.out.println(manager.getHistory());
+
+        manager.getTaskById(2);
+        System.out.println(manager.getHistory());
+
+        manager.getEpicById(4);
+        System.out.println(manager.getHistory());
+
+        manager.removeTaskById(2);
+        System.out.println(manager.getHistory());
+
+        manager.removeEpicById(3);
+        System.out.println(manager.getHistory());
+
+    }
+
+    private static TaskManager getTaskManager() {
+        TaskManager manager = Managers.getDefault();
+
+        Task taskA = new Task("Задача A", "Описание задачи A", Status.NEW);
+        Task taskB = new Task("Задача B", "Описание задачи B", Status.DONE);
+        Epic epicA = new Epic("Эпик A", "Описание эпика с тремя подзадачами");
+        Epic epicB = new Epic("Эпик B", "Описание эпика без подзадач");
+        SubTask subTaskA = new SubTask("Подзадача A1", "Подзадача 1 эпика A",
+                Status.NEW, 3);
+        SubTask subTaskB = new SubTask("Подзадача A2", "Подзадача 2 эпика A",
+                Status.DONE, 3);
+        SubTask subTaskC = new SubTask("Подзадача A3", "Подзадача 3 эпика A",
+                Status.NEW, 3);
+
+        manager.createTask(taskA); // id = 1
+        manager.createTask(taskB); // id = 2
+        manager.createEpic(epicA); // id = 3
+        manager.createEpic(epicB); // id = 4
+        manager.createSubTask(subTaskA); // id = 5
+        manager.createSubTask(subTaskB); // id = 6
+        manager.createSubTask(subTaskC); // id = 7
+        return manager;
     }
 
     private static void printAllTasks(TaskManager manager) {

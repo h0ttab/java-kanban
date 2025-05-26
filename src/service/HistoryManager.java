@@ -2,12 +2,12 @@ package service;
 
 import model.Task;
 
-import java.util.Deque;
+import java.util.List;
 
 public interface HistoryManager {
     void addTask(Task task);
 
-    Deque<Task> getHistory();
+    List<Task> getHistory();
 
-    int getHistoryMaxSize();
+    void remove(int id);
 }

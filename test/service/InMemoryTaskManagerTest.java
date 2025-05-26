@@ -3,10 +3,13 @@ package service;
 import model.*;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryTaskManagerTest {
-    private final TaskManager taskManager = Managers.getDefault();
+    private TaskManager taskManager;
     Task task = new Task("Задача", "Описание задачи", Status.NEW);
     Epic epic = new Epic("Эпик", "Описание эпика");
     SubTask subTask = new SubTask("Подзадача", "Описание подзадачи",
@@ -14,6 +17,7 @@ public class InMemoryTaskManagerTest {
 
     @BeforeEach
     void addTasksOfEachType(){
+        taskManager = Managers.getDefault();
         taskManager.createTask(task);// id=1
         taskManager.createEpic(epic); // id=2
         taskManager.createSubTask(subTask); // id=3, epicId=2
@@ -42,6 +46,18 @@ public class InMemoryTaskManagerTest {
     void shouldDeleteTaskCorrectly(){
         taskManager.removeTaskById(1);
         assertNull(taskManager.getTaskById(1));
+    }
+
+    @Test
+    @DisplayName("Записи о просмотрах удаляются из истории при удалении задачи")
+    void shouldDeleteViewHistoryRecordsCorrectly(){
+        Task task = taskManager.getTaskById(1);
+        List<Task> expectedHistory = new ArrayList<>(List.of(epic, task));
+
+        assertEquals(expectedHistory, taskManager.getHistory());
+
+        taskManager.removeTaskById(1);
+        assertEquals(new ArrayList<Task>(List.of(epic)), taskManager.getHistory());
     }
 
     @Test
@@ -82,15 +98,22 @@ public class InMemoryTaskManagerTest {
         TaskManager taskManager = Managers.getDefault();
         Task originalTask = new Task("Оригинал", "Описание оригинала", Status.NEW);
 
+        // Добавляем задачу в менеджер и дёргаем get, чтобы она попала в историю
         int addedTaskId = taskManager.createTask(originalTask);
         taskManager.getTaskById(1);
 
+        // Проверяем, что первая (единственная) запись в истории - исходная задача
+        assertEquals(taskManager.getHistory().getFirst(), originalTask);
+
+        // Создаём обновлённую задачу и через updateTask заменяем исходную задачу в менеджере
         Task updatedTask = new Task("Уже не оригинал","Другое описание", Status.IN_PROGRESS);
         taskManager.updateTask(updatedTask, addedTaskId);
 
-        assertEquals(updatedTask ,taskManager.getTaskById(1));
-        assertEquals(taskManager.getHistory().getFirst(), originalTask);
-        assertEquals(taskManager.getHistory().getLast(), updatedTask);
+        // Проверяем, что в менеджере лежит уже обновлённая задача + дёргаем get, чтобы обновить историю
+        assertEquals(updatedTask, taskManager.getTaskById(1));
+
+        // Проверяем, что первая (единственная) запись в истории - обновлённая задача
+        assertEquals(taskManager.getHistory().getFirst(), updatedTask);
     }
 
     @Test

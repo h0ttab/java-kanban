@@ -5,7 +5,7 @@ import model.*;
 import java.util.*;
 
 public interface TaskManager {
-    Deque<Task> getHistory();
+    List<Task> getHistory();
 
     List<Task> getTasks();
 

@@ -1,29 +1,72 @@
 package service;
 
+import model.Node;
 import model.Task;
 
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final Deque<Task> viewsHistory = new LinkedList<>();
-    private final int HISTORY_MAX_SIZE = 10;
+    private final Map<Integer, Node<Task>> historyMap = new HashMap<>();
+    private Node<Task> head;
+    private Node<Task> tail;
+
+    private void linkLast(Node<Task> node) {
+        if (tail == null) {
+            head = node;
+        } else {
+            tail.next = node;
+            node.prev = tail;
+        }
+        tail = node;
+    }
+
+    public void remove(int taskId) {
+        if (taskId == tail.value.getId()) {
+            if (tail.prev != null) {
+                tail = tail.prev;
+                tail.next = null;
+            } else {
+                tail = null;
+            }
+            return;
+        } else if (taskId == head.value.getId()) {
+            if (head.next != null) {
+                head = head.next;
+                head.prev = null;
+            } else {
+                head = null;
+            }
+            return;
+        }
+        if (historyMap.containsKey(taskId)) {
+            historyMap.remove(taskId).removeSelf();
+        }
+    }
 
     @Override
-    public Deque<Task> getHistory() {
-        return viewsHistory;
+    public List<Task> getHistory() {
+        List<Task> history = new ArrayList<>();
+        Node<Task> pointer = head;
+
+        while (pointer != null) {
+            history.add(pointer.value);
+            pointer = pointer.next;
+        }
+
+        return history;
     }
 
     @Override
     public void addTask(Task task) {
-        if (viewsHistory.size() >= HISTORY_MAX_SIZE) {
-            viewsHistory.removeFirst();
-        }
-        viewsHistory.addLast(task);
-    }
+        Integer taskId = task.getId();
 
-    @Override
-    public int getHistoryMaxSize() {
-        return HISTORY_MAX_SIZE;
+        if (historyMap.containsKey(taskId)) {
+            remove(taskId);
+        }
+
+        Node<Task> newHistoryRecord = new Node<>(task);
+        historyMap.put(taskId, newHistoryRecord);
+        linkLast(newHistoryRecord);
     }
 
 }

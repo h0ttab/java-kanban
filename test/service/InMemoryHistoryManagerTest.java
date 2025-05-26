@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryHistoryManagerTest {
     private HistoryManager historyManager;
-    private static final int HISTORY_MAX_SIZE = Managers.getDefaultHistory().getHistoryMaxSize();
 
     private static final Task task = new Task("Задача", "Описание задачи", Status.NEW);
     private static final Epic epic = new Epic("Эпик", "Описание эпика");
@@ -19,43 +18,61 @@ public class InMemoryHistoryManagerTest {
     @BeforeEach
     void initHistoryManager() {
         historyManager = Managers.getDefaultHistory();
+        task.setId(1);
+        epic.setId(2);
+        subTask.setId(3);
+        historyManager.addTask(task);
+        historyManager.addTask(epic);
+        historyManager.addTask(subTask);
     }
 
     @Test
     @DisplayName("Класс InMemoryHistoryManager корректно добавляет задачи в историю просмотров")
     void shouldAddTasksToHistory() {
-        historyManager.addTask(task);
-        historyManager.addTask(epic);
-        historyManager.addTask(subTask);
-
-        Deque<Task> expectedHistory = new LinkedList<>(List.of(task, epic, subTask));
+        List<Task> expectedHistory = new LinkedList<>(List.of(task, epic, subTask));
         assertEquals(expectedHistory, historyManager.getHistory());
     }
 
     @Test
-    @DisplayName("Класс InMemoryHistoryManager корректно ограничивает размер истории просмотров задач")
-    void shouldNotOverflowHistorySize() {
-        for (int i = 0; i < HISTORY_MAX_SIZE + 1; i++) {
-            historyManager.addTask(task);
-        }
-        assertEquals(HISTORY_MAX_SIZE, historyManager.getHistory().size());
+    @DisplayName("Задачи корректно удаляются из истории по ID задачи")
+    void shouldRemoveViewRecordByTaskId() {
+        List<Task> expectedHistory = new ArrayList<>(List.of(task, subTask));
+        historyManager.remove(2);
+
+        assertEquals(expectedHistory, historyManager.getHistory());
     }
 
     @Test
-    @DisplayName("Класс InMemoryHistoryManager корректно размещает элементы по принципу first in - first out")
-    void shouldFollowFIFOOrder() {
-        historyManager.addTask(subTask);
-        for (int i = 0; i < HISTORY_MAX_SIZE - 2; i++) {
-            historyManager.addTask(task);
-        }
-        historyManager.addTask(epic);
+    @DisplayName("История не содержит дубликатов и хранит только самый свежий просмотр задачи")
+    void shouldKeepOnlyUniqueLatestViews() {
+        // Обновление записи из середины истории
+        Task updatedEpic = new Epic("Эпик", "Обновлённое описание эпика");
+        updatedEpic.setId(2);
+        List<Task> expectedHistory = new ArrayList<>(List.of(task, subTask, updatedEpic));
 
-        assertEquals(subTask, historyManager.getHistory().getFirst());
-        assertEquals(epic, historyManager.getHistory().getLast());
+        historyManager.addTask(updatedEpic);
 
-        historyManager.addTask(subTask);
+        assertEquals(expectedHistory, historyManager.getHistory());
 
-        assertEquals(task, historyManager.getHistory().getFirst());
-        assertEquals(subTask, historyManager.getHistory().getLast());
+        // Обновление записи из начала истории (head node)
+        initHistoryManager();
+        Task updatedTask = new Task("Задача", "Описание задачи", Status.DONE);
+        updatedTask.setId(1);
+        expectedHistory = new ArrayList<>(List.of(epic, subTask, updatedTask));
+
+        historyManager.addTask(updatedTask);
+
+        assertEquals(expectedHistory, historyManager.getHistory());
+
+        // Обновление записи из конца истории (tail node)
+        initHistoryManager();
+        Task updatedSubTask = new SubTask("Подзадача", "Описание подзадачи",
+                Status.NEW, 2);
+        updatedSubTask.setId(3);
+        expectedHistory = new ArrayList<>(List.of(task, epic, updatedSubTask));
+
+        historyManager.addTask(updatedSubTask);
+
+        assertEquals(expectedHistory, historyManager.getHistory());
     }
 }
