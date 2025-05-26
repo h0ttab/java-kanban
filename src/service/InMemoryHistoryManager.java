@@ -38,7 +38,9 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
             return;
         }
-        historyMap.get(taskId).removeSelf();
+        if (historyMap.containsKey(taskId)) {
+            historyMap.remove(taskId).removeSelf();
+        }
     }
 
     @Override
