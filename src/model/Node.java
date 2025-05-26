@@ -17,21 +17,13 @@ public class Node<T> {
 
         if (next != null) {
             nextNode = next;
-            nextNode.linkPrev(prev);
+            nextNode.prev = prev;
         }
 
         if (prev != null) {
             prevNode = prev;
-            prevNode.linkNext(next);
+            prevNode.next = next;
         }
-    }
-
-    public void linkNext(Node<T> node) {
-        next = node;
-    }
-
-    public void linkPrev(Node<T> node) {
-        prev = node;
     }
 
     @Override

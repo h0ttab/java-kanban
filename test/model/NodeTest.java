@@ -1,6 +1,5 @@
 package model;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -13,10 +12,10 @@ public class NodeTest {
 
     @BeforeEach
     void linkTestNodes() {
-        testNodeA.linkNext(testNodeB);
-        testNodeB.linkPrev(testNodeA);
-        testNodeB.linkNext(testNodeC);
-        testNodeC.linkPrev(testNodeB);
+        testNodeA.next = testNodeB;
+        testNodeB.prev = testNodeA;
+        testNodeB.next = testNodeC;
+        testNodeC.prev = testNodeB;
     }
 
     @Test
@@ -44,8 +43,8 @@ public class NodeTest {
     @DisplayName("Два идентичных узла равны друг другу")
     void shouldBeEqualIfIdentical() {
         Node<String> copyOfTestNodeB = new Node<>("Node B");
-        copyOfTestNodeB.linkPrev(testNodeA);
-        copyOfTestNodeB.linkNext(testNodeC);
+        copyOfTestNodeB.prev = testNodeA;
+        copyOfTestNodeB.next = testNodeC;
 
         // Намеренное использование assertTrue вместо assertEquals,
         // чтобы проверить метод equals()
