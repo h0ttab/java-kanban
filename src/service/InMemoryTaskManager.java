@@ -188,6 +188,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTaskById(int id) {
         if (allTasks.containsKey(id)) {
             allTasks.remove(id);
+            historyManager.remove(id);
         } else {
             System.out.println("Ошибка при вызове removeTaskById(int id): Невозможно удалить задачу id "
                     + id + " по id: задача не найдена.");
@@ -204,6 +205,7 @@ public class InMemoryTaskManager implements TaskManager {
                 removeSubTaskById(subTaskId);
             }
             allEpics.remove(id);
+            historyManager.remove(id);
         } else {
             throw new IllegalArgumentException("Ошибка при вызове removeEpicById(int id): Невозможно удалить эпик id "
                     + id + " по id - эпик не найден.");
@@ -218,6 +220,7 @@ public class InMemoryTaskManager implements TaskManager {
 
             epic.unlinkSubTask(id);
             allSubTasks.remove(id);
+            historyManager.remove(id);
         } else {
             System.out.println("Ошибка при вызове removeSubTaskById(int id): Невозможно удалить подзадачу id "
                     + id + " по id: подзадача не найдена.");

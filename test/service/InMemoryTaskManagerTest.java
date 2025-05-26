@@ -3,10 +3,13 @@ package service;
 import model.*;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryTaskManagerTest {
-    private final TaskManager taskManager = Managers.getDefault();
+    private TaskManager taskManager;
     Task task = new Task("Задача", "Описание задачи", Status.NEW);
     Epic epic = new Epic("Эпик", "Описание эпика");
     SubTask subTask = new SubTask("Подзадача", "Описание подзадачи",
@@ -14,6 +17,7 @@ public class InMemoryTaskManagerTest {
 
     @BeforeEach
     void addTasksOfEachType(){
+        taskManager = Managers.getDefault();
         taskManager.createTask(task);// id=1
         taskManager.createEpic(epic); // id=2
         taskManager.createSubTask(subTask); // id=3, epicId=2
@@ -42,6 +46,18 @@ public class InMemoryTaskManagerTest {
     void shouldDeleteTaskCorrectly(){
         taskManager.removeTaskById(1);
         assertNull(taskManager.getTaskById(1));
+    }
+
+    @Test
+    @DisplayName("Записи о просмотрах удаляются из истории при удалении задачи")
+    void shouldDeleteViewHistoryRecordsCorrectly(){
+        Task task = taskManager.getTaskById(1);
+        List<Task> expectedHistory = new ArrayList<>(List.of(epic, task));
+
+        assertEquals(expectedHistory, taskManager.getHistory());
+
+        taskManager.removeTaskById(1);
+        assertEquals(new ArrayList<Task>(List.of(epic)), taskManager.getHistory());
     }
 
     @Test
