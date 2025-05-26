@@ -82,12 +82,6 @@ public class Epic extends Task {
     }
 
     @Override
-    public void setStatus(Status status) {
-        System.out.println("Ошибка изменения статуса: "
-                + "для эпиков ручное изменение статуса запрещено");
-    }
-
-    @Override
     public String toString() {
         return "Epic{" +
                 "subTaskIdList=" + getSubTaskIdList() +
