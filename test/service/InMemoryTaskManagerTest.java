@@ -82,15 +82,22 @@ public class InMemoryTaskManagerTest {
         TaskManager taskManager = Managers.getDefault();
         Task originalTask = new Task("Оригинал", "Описание оригинала", Status.NEW);
 
+        // Добавляем задачу в менеджер и дёргаем get, чтобы она попала в историю
         int addedTaskId = taskManager.createTask(originalTask);
         taskManager.getTaskById(1);
 
+        // Проверяем, что первая (единственная) запись в истории - исходная задача
+        assertEquals(taskManager.getHistory().getFirst(), originalTask);
+
+        // Создаём обновлённую задачу и через updateTask заменяем исходную задачу в менеджере
         Task updatedTask = new Task("Уже не оригинал","Другое описание", Status.IN_PROGRESS);
         taskManager.updateTask(updatedTask, addedTaskId);
 
-        assertEquals(updatedTask ,taskManager.getTaskById(1));
-        assertEquals(taskManager.getHistory().getFirst(), originalTask);
-        assertEquals(taskManager.getHistory().getLast(), updatedTask);
+        // Проверяем, что в менеджере лежит уже обновлённая задача + дёргаем get, чтобы обновить историю
+        assertEquals(updatedTask, taskManager.getTaskById(1));
+
+        // Проверяем, что первая (единственная) запись в истории - обновлённая задача
+        assertEquals(taskManager.getHistory().getFirst(), updatedTask);
     }
 
     @Test
