@@ -21,6 +21,23 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public void remove(int taskId) {
+        if (taskId == tail.value.getId()) {
+            if (tail.prev != null) {
+                tail = tail.prev;
+                tail.next = null;
+            } else {
+                tail = null;
+            }
+            return;
+        } else if (taskId == head.value.getId()) {
+            if (head.next != null) {
+                head = head.next;
+                head.prev = null;
+            } else {
+                head = null;
+            }
+            return;
+        }
         historyMap.get(taskId).removeSelf();
     }
 
