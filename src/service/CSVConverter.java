@@ -21,6 +21,20 @@ public class CSVConverter {
         return result.toString();
     }
 
+    public static String singleLineToCSV(String[] headers, String[] data) {
+        StringBuilder result = new StringBuilder();
+
+        if (data.length > headers.length) {
+            throw new IllegalArgumentException("Ошибка конвертации в CSV: количество полей в строке превышает"
+                    + " указанное количество заголовков - " + headers.length + ". Строка, вызвавшая ошибку: "
+                    + "\n" + Arrays.toString(data));
+        }
+        result.append(String.join(",", data));
+        result.append("\n");
+
+        return result.toString();
+    }
+
     public static Map<String, String[]> fromCSV(String data) throws IllegalArgumentException {
         Map<String, ArrayList<String>> mappedData = new LinkedHashMap<>();
         Map<String, String[]> result = new LinkedHashMap<>();
