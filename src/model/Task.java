@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Task {
@@ -32,6 +33,26 @@ public class Task {
 
     public Status getStatus() {
         return status;
+    }
+
+    public String toCSV(int headersCount) {
+        ArrayList<String> fields = new ArrayList<>();
+        fields.add(String.valueOf(id));
+        fields.add("TASK");
+        fields.add(title);
+        fields.add(status.toString());
+        fields.add(description);
+
+        if (headersCount > fields.size()) {
+            int diff = headersCount - fields.size();
+
+            for (int i = 0; i < diff; i++) {
+                fields.add(",");
+            }
+        }
+        fields.add("\n");
+
+        return String.join(",", fields);
     }
 
     @Override

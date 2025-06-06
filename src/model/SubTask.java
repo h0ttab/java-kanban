@@ -15,6 +15,11 @@ public class SubTask extends Task {
     }
 
     @Override
+    public String toCSV(int headersCount){
+        return super.toCSV(headersCount).replace("TASK", "SUBTASK") + "," + epicId;
+    }
+
+    @Override
     public String toString() {
         return "SubTask{" +
                 "epicId=" + getEpicId() +

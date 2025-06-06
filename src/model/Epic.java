@@ -82,6 +82,11 @@ public class Epic extends Task {
     }
 
     @Override
+    public String toCSV(int headersCount){
+        return super.toCSV(headersCount).replace("TASK", "EPIC");
+    }
+
+    @Override
     public String toString() {
         return "Epic{" +
                 "subTaskIdList=" + getSubTaskIdList() +
