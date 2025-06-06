@@ -84,14 +84,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     @Override
     public int createEpic(Epic epic) {
-        int id = super.createTask(epic);
+        int id = super.createEpic(epic);
         save();
         return id;
     }
 
     @Override
     public int createSubTask(SubTask subTask) {
-        int id = super.createTask(subTask);
+        int id = super.createSubTask(subTask);
         save();
         return id;
     }
