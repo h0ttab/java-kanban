@@ -43,15 +43,6 @@ public class Task {
         fields.add(status.toString());
         fields.add(description);
 
-        if (headersCount > fields.size()) {
-            int diff = headersCount - fields.size();
-
-            for (int i = 0; i < diff; i++) {
-                fields.add(",");
-            }
-        }
-        fields.add("\n");
-
         return String.join(",", fields);
     }
 
