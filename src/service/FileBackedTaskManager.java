@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 import service.exceptions.ManagerSaveException;
 
+import static service.utils.CSVUtils.*;
+
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final Path saveFilePath;
     private final String[] headers = new String[]{"id", "type", "name", "status", "description", "epic"};
@@ -33,6 +35,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     private String getAllTasksAsCSV() {
         StringBuilder result = new StringBuilder();
         ArrayList<Task> allTasks = new ArrayList<>();
+        int headersCount = headers.length;
         result.append(String.join(",", headers));
         result.append("\n");
 
@@ -42,11 +45,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
         for (Task task : allTasks) {
             if (task instanceof Epic epic) {
-                result.append(epic.toCSV(headers.length)).append(",");
+                result.append(csvCommaEqualizer(headersCount - 1, epic.toCSV(headersCount)));
             } else if (task instanceof SubTask subTask) {
-                result.append(subTask.toCSV(headers.length));
+                result.append(csvCommaEqualizer(headersCount - 1, subTask.toCSV(headersCount)));
             } else {
-                result.append(task.toCSV(headers.length)).append(",");
+                result.append(csvCommaEqualizer(headersCount - 1, task.toCSV(headersCount)));
             }
             result.append("\n");
         }
