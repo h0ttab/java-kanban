@@ -41,11 +41,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         allTasks.addAll(getSubTasks());
 
         for (Task task : allTasks) {
-            if (task instanceof Epic) {
-                Epic epic = (Epic) task;
+            if (task instanceof Epic epic) {
                 result.append(epic.toCSV(headers.length)).append(",");
-            } else if (task instanceof SubTask) {
-                SubTask subTask = (SubTask) task;
+            } else if (task instanceof SubTask subTask) {
                 result.append(subTask.toCSV(headers.length));
             } else {
                 result.append(task.toCSV(headers.length)).append(",");
