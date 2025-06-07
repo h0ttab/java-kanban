@@ -1,29 +1,27 @@
 package service;
 
-import model.*;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import model.*;
 import service.exceptions.ManagerSaveException;
 
-import static service.utils.CSVUtils.*;
+import static service.utils.StringUtils.csvCommaEqualizer;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final Path saveFilePath;
     private final String[] headers = new String[]{"id", "type", "name", "status", "description", "epic"};
 
-    public FileBackedTaskManager(IdGenerator idGenerator, HistoryManager historyManager, Path saveFilePath ) {
+    public FileBackedTaskManager(IdGenerator idGenerator, HistoryManager historyManager, Path saveFilePath) {
         super(idGenerator, historyManager);
         this.saveFilePath = saveFilePath;
     }
 
     public void save() throws ManagerSaveException {
         String data = getAllTasksAsCSV();
+
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(saveFilePath.toString(), StandardCharsets.UTF_8))) {
             writer.write(data);
@@ -35,9 +33,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     private String getAllTasksAsCSV() {
         StringBuilder result = new StringBuilder();
         ArrayList<Task> allTasks = new ArrayList<>();
-        int headersCount = headers.length;
-        result.append(String.join(",", headers));
-        result.append("\n");
+        int headersCommaCount = headers.length - 1;
+
+        result.append(String.join(",", headers)).append("\n");
 
         allTasks.addAll(getTasks());
         allTasks.addAll(getEpics());
@@ -45,11 +43,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
         for (Task task : allTasks) {
             if (task instanceof Epic epic) {
-                result.append(csvCommaEqualizer(headersCount - 1, epic.toCSV(headersCount)));
+                result.append(
+                        csvCommaEqualizer(headersCommaCount, epic.toCSV(headers.length)));
             } else if (task instanceof SubTask subTask) {
-                result.append(csvCommaEqualizer(headersCount - 1, subTask.toCSV(headersCount)));
+                result.append(
+                        csvCommaEqualizer(headersCommaCount, subTask.toCSV(headers.length)));
             } else {
-                result.append(csvCommaEqualizer(headersCount - 1, task.toCSV(headersCount)));
+                result.append(
+                        csvCommaEqualizer(headersCommaCount, task.toCSV(headers.length)));
             }
             result.append("\n");
         }

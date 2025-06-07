@@ -82,7 +82,7 @@ public class Epic extends Task {
     }
 
     @Override
-    public String toCSV(int headersCount){
+    public String toCSV(int headersCount) {
         return super.toCSV(headersCount).replace("TASK", "EPIC");
     }
 

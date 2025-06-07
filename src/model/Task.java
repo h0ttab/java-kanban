@@ -1,7 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 public class Task {
     private final String title;
@@ -36,12 +35,12 @@ public class Task {
     }
 
     public String toCSV(int headersCount) {
-        ArrayList<String> fields = new ArrayList<>();
-        fields.add(String.valueOf(id));
-        fields.add("TASK");
-        fields.add(title);
-        fields.add(status.toString());
-        fields.add(description);
+        ArrayList<String> fields = new ArrayList<>(List.of(
+                String.valueOf(id),
+                "TASK",
+                title,
+                status.toString(),
+                description));
 
         return String.join(",", fields);
     }
