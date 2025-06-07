@@ -1,8 +1,11 @@
 package service;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.*;
-import java.io.File;
+import java.util.ArrayList;
+
+import service.exceptions.ManagerLoadException;
+import service.utils.Utils;
 
 public class Managers {
 
@@ -13,35 +16,48 @@ public class Managers {
         return new InMemoryTaskManager(idGenerator, historyManager);
     }
 
-    public static TaskManager getFileBacked(String fileName) {
+    public static FileBackedTaskManager getFileBacked(String fileName) throws IOException, ManagerLoadException {
         return getFileBacked(Paths.get(fileName));
     }
 
-    public static TaskManager getFileBacked(File file) {
+    public static FileBackedTaskManager getFileBacked(File file) throws IOException, ManagerLoadException {
         return getFileBacked(file.toPath());
     }
 
-    public static TaskManager getFileBacked(Path filePath) {
-        IdGenerator idGenerator = new IdGenerator();
-        HistoryManager historyManager = getDefaultHistory();
-
+    public static FileBackedTaskManager getFileBacked(Path filePath) throws IOException, ManagerLoadException {
         if (Files.notExists(filePath)) {
+            Files.createFile(filePath);
+            return new FileBackedTaskManager(new IdGenerator(), getDefaultHistory(), filePath);
+        }
+
+        if (!Files.isRegularFile(filePath)) {
+            throw new ManagerLoadException(filePath + " не является файлом.");
+        }
+
+        return loadFromFile(filePath.toFile());
+    }
+
+    public static FileBackedTaskManager loadFromFile(File file) throws ManagerLoadException {
+        FileBackedTaskManager manager = new FileBackedTaskManager(
+                new IdGenerator(), getDefaultHistory(), file.toPath());
+        ArrayList<String[]> tasksData = Utils.parseCSV(file);
+
+        for (int i = 1; i < tasksData.size(); i++) {
+            String[] task = tasksData.get(i);
+
             try {
-                Files.createFile(filePath);
-            } catch (IOException e) {
-                System.out.println("Ошибка при создании файла сохранения для FileBackedTaskManager.");
+                switch (task[1]) {
+                    case "TASK" -> manager.loadTask(task);
+                    case "EPIC" -> manager.loadEpic(task);
+                    case "SUBTASK" -> manager.loadSubTask(task);
+                }
+            } catch (NullPointerException | ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
+                System.out.println("Во время чтения файла сохранения произошла ошибка: " + e.getMessage());
+                throw new ManagerLoadException("Ошибка при чтении CSV строки: " + e.getMessage());
             }
         }
 
-        try {
-            if (!Files.isRegularFile(filePath)) {
-                throw new IOException("Указанный путь сохранения для FileBackedTaskManager не является файлом.");
-            }
-        } catch (IOException e) {
-            System.out.println("Ошибка получения файла сохранения: " + e.getMessage());
-        }
-
-        return new FileBackedTaskManager(idGenerator, historyManager, filePath);
+        return manager;
     }
 
     public static HistoryManager getDefaultHistory() {

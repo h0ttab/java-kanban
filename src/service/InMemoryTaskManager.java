@@ -5,9 +5,9 @@ import model.*;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> allTasks = new HashMap<>();
-    private final Map<Integer, Epic> allEpics = new HashMap<>();
-    private final Map<Integer, SubTask> allSubTasks = new HashMap<>();
+    protected final Map<Integer, Task> allTasks = new HashMap<>();
+    protected final Map<Integer, Epic> allEpics = new HashMap<>();
+    protected final Map<Integer, SubTask> allSubTasks = new HashMap<>();
     private final IdGenerator idGenerator;
     private final HistoryManager historyManager;
 
@@ -207,7 +207,7 @@ public class InMemoryTaskManager implements TaskManager {
             allEpics.remove(id);
             historyManager.remove(id);
         } else {
-            throw new IllegalArgumentException("Ошибка при вызове removeEpicById(int id): Невозможно удалить эпик id "
+            System.out.println("Ошибка при вызове removeEpicById(int id): Невозможно удалить эпик id "
                     + id + " по id - эпик не найден.");
         }
     }

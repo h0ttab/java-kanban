@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import model.*;
 import service.exceptions.ManagerSaveException;
 
-import static service.utils.StringUtils.csvCommaEqualizer;
+import static service.utils.Utils.csvCommaEqualizer;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final Path saveFilePath;
@@ -56,6 +56,51 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         }
 
         return result.toString();
+    }
+
+    public void loadTask(String[] data) {
+        String title = data[2];
+        String description = data[4];
+        Status status = Status.valueOf(data[3]);
+        int id = Integer.parseInt(data[0]);
+        Task task = new Task(title, description, status);
+        createTask(task, id);
+    }
+
+    public void loadEpic(String[] data) {
+        String title = data[2];
+        String description = data[4];
+        Status status = Status.valueOf(data[3]);
+        int id = Integer.parseInt(data[0]);
+        Epic epic = new Epic(title, description, status);
+        createEpic(epic, id);
+    }
+
+    public void loadSubTask(String[] data) {
+        String title = data[2];
+        String description = data[4];
+        Status status = Status.valueOf(data[3]);
+        int epicId = Integer.parseInt(data[5]);
+        int id = Integer.parseInt(data[0]);
+        SubTask subTask = new SubTask(title, description, status, epicId);
+        createSubTask(subTask, id);
+    }
+
+    private void createTask(Task task, int id) {
+        task.setId(id);
+        allTasks.put(id, task);
+    }
+
+    private void createEpic(Epic epic, int id) {
+        epic.setId(id);
+        allEpics.put(id, epic);
+    }
+
+    private void createSubTask(SubTask subTask, int id) {
+        subTask.setId(id);
+        Epic relatedEpic = getEpicById(subTask.getEpicId());
+        relatedEpic.addSubTask(id, subTask.getStatus());
+        allSubTasks.put(id, subTask);
     }
 
     @Override

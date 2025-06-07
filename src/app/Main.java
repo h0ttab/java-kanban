@@ -36,7 +36,6 @@ public class Main {
 
         manager.removeEpicById(3);
         System.out.println(manager.getHistory());
-
     }
 
     private static TaskManager getTaskManager() {

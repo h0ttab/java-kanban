@@ -1,6 +1,10 @@
 package service.utils;
 
-public class StringUtils {
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
+public class Utils {
 
     private static int substringCounter(String s, String substring) {
         int substringCount = 0;
@@ -20,5 +24,19 @@ public class StringUtils {
         int commaCountDiff = commaExpectedCount - substringCounter(csvString, ",");
 
         return result.append(",".repeat(Math.max(0, commaCountDiff))).toString();
+    }
+
+    public static ArrayList<String[]> parseCSV(File file) {
+        ArrayList<String[]> data = new ArrayList<>();
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+            while (reader.ready()) {
+                data.add(reader.readLine().split(","));
+            }
+        } catch (IOException e) {
+            System.out.println("Произошла ошибка при чтении файла сохранения: " + e.getMessage());
+        }
+
+        return data;
     }
 }
