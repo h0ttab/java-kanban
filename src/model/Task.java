@@ -35,14 +35,7 @@ public class Task {
     }
 
     public String toCSV(int headersCount) {
-        ArrayList<String> fields = new ArrayList<>(List.of(
-                String.valueOf(id),
-                "TASK",
-                title,
-                status.toString(),
-                description));
-
-        return String.join(",", fields);
+        return String.format("%s,%s,%s,%s,%s", id,"TASK",title,status,description);
     }
 
     @Override

@@ -13,6 +13,13 @@ import service.utils.Utils;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManagersTest {
+    File testFile;
+
+    @BeforeEach
+    void initTestFile() throws IOException {
+        testFile = File.createTempFile("test", "csv");
+        testFile.deleteOnExit();
+    }
 
     @Test
     @DisplayName("Класс Managers возвращает корректно работающий экземпляр менеджера задач")
@@ -43,7 +50,6 @@ public class ManagersTest {
     @Test
     @DisplayName("Метод getFileBacked() возвращает инициализированный экземпляр менеджера задач")
     void shouldReturnCorrectlyInitializedFileBackedManager() throws IOException {
-        File testFile = File.createTempFile("test", "csv");
         Path testFilePath = testFile.toPath();
         String testFileString = testFile.toString();
         String taskCSV = "1,TASK,Task1,NEW,Description task1,";
@@ -74,7 +80,7 @@ public class ManagersTest {
 
     @Test
     @DisplayName("Метод getFileBacked выбрасывает исключение, если вместо файла указан путь на директорию")
-    void shouldThrowManagerLoadException() throws IOException {
+    void shouldThrowManagerLoadException() {
         File dir = new File(System.getProperty("user.home"));
 
         assertThrows(ManagerLoadException.class, () -> Managers.getFileBacked(dir));
@@ -83,7 +89,6 @@ public class ManagersTest {
     @Test
     @DisplayName("Метод loadFromFile корректно загружает данные из CSV файла")
     void shouldCorrectlyLoadFromCSVFile() throws IOException {
-        File testFile = File.createTempFile("test", "csv");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))) {
             writer.write("""
                     id,type,name,status,description,epic
@@ -103,13 +108,12 @@ public class ManagersTest {
 
     @Test
     @DisplayName("Метод loadFromFile выбрасывает исключение ManagerLoadException при невалидном CSV")
-    void shouldThrowManagerLoadExceptionForInvalidCSV() throws IOException {
-        File testFile = File.createTempFile("test", "csv");
+    void shouldThrowManagerLoadExceptionForInvalidCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))) {
             writer.write("""
                     id,type,name,status,description,epic
-                    1,TASK,Task1,NEW,Description task1,
-                    ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                    1,INVALID_TYPE,Task1,NEW,Description task1,
+                    NOT_A_CSV_LINE
                     """);
         } catch (IOException e) {
             e.printStackTrace();

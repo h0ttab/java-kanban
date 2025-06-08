@@ -1,11 +1,11 @@
 package service;
 
-import service.exceptions.ManagerLoadException;
-import service.utils.Utils;
-
 import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
+
+import service.exceptions.ManagerLoadException;
+import service.utils.Utils;
 
 public class Managers {
 
@@ -50,9 +50,10 @@ public class Managers {
                     case "TASK" -> manager.loadTask(task);
                     case "EPIC" -> manager.loadEpic(task);
                     case "SUBTASK" -> manager.loadSubTask(task);
+                    default -> throw new IllegalArgumentException();
                 }
             } catch (NullPointerException | ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
-                System.out.println("Во время чтения файла сохранения произошла ошибка: " + e.getMessage());
+                System.out.println("Во время чтения файла сохранения произошла ошибка: " + e);
                 throw new ManagerLoadException("Ошибка при чтении CSV строки: " + e.getMessage());
             }
         }

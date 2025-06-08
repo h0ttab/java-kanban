@@ -1,10 +1,11 @@
 package service;
 
-import model.*;
-import org.junit.jupiter.api.*;
-
 import java.io.*;
 import java.lang.reflect.*;
+
+import org.junit.jupiter.api.*;
+
+import model.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -156,9 +157,10 @@ public class FileBackedTaskManagerTest {
 
     @Test
     @DisplayName("Менеджер корректно инициализируется и работает, если входной файл пуст")
-    void shouldHandleEmptySaveFile() throws IOException {
+    void shouldHandleEmptySaveFile() {
         try {
             File emptyFile = File.createTempFile("empty", "csv");
+            emptyFile.deleteOnExit();
             FileBackedTaskManager manager = new FileBackedTaskManager(new IdGenerator(),
                     Managers.getDefaultHistory(), emptyFile);
             String taskCsv = "1,TASK,Title,NEW,Description,";

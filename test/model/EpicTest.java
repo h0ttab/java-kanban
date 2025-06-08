@@ -1,9 +1,10 @@
 package model;
 
-import org.junit.jupiter.api.*;
-import service.*;
-
 import java.lang.reflect.Field;
+
+import org.junit.jupiter.api.*;
+
+import service.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
