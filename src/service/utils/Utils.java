@@ -6,22 +6,26 @@ import java.util.ArrayList;
 
 public class Utils {
 
-    private static int substringCounter(String s, String substring) {
+    public static int substringCounter(String s, String substring) {
         int substringCount = 0;
-        int currentIndexOf = 0;
+        int currentIndex = 0;
 
-        while (currentIndexOf != s.lastIndexOf(substring)) {
+        if (!s.contains(substring)) {
+           return 0;
+        }
+
+        while (s.indexOf(substring, currentIndex) != -1) {
             substringCount++;
-            currentIndexOf = s.indexOf(substring, currentIndexOf + 1);
+            currentIndex = s.indexOf(substring, currentIndex) + 1;
         }
 
         return substringCount;
     }
 
-    public static String csvCommaEqualizer(int commaExpectedCount, String csvString) {
+    public static String csvCommaEqualizer(int headersCount, String csvString) {
         StringBuilder result = new StringBuilder(csvString);
 
-        int commaCountDiff = commaExpectedCount - substringCounter(csvString, ",");
+        int commaCountDiff = headersCount - 1 - substringCounter(csvString, ",");
 
         return result.append(",".repeat(Math.max(0, commaCountDiff))).toString();
     }

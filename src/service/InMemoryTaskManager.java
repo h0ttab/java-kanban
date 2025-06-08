@@ -16,11 +16,16 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
-    private int generateUniqueId(Map<Integer, ?> storage) {
+    private int generateUniqueId() {
+        Set<Integer> allIds = new HashSet<>();
+        allIds.addAll(allTasks.keySet());
+        allIds.addAll(allEpics.keySet());
+        allIds.addAll(allSubTasks.keySet());
+
         int id;
         do {
             id = idGenerator.generateId();
-        } while (storage.containsKey(id));
+        } while (allIds.contains(id));
         return id;
     }
 
@@ -113,7 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createTask(Task task) {
-        int newId = generateUniqueId(allTasks);
+        int newId = generateUniqueId();
         task.setId(newId);
         allTasks.put(newId, task);
 
@@ -122,7 +127,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createEpic(Epic epic) {
-        int newId = generateUniqueId(allEpics);
+        int newId = generateUniqueId();
         epic.setId(newId);
         allEpics.put(newId, epic);
 
@@ -131,7 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubTask(SubTask subTask) {
-        int newId = generateUniqueId(allSubTasks);
+        int newId = generateUniqueId();
         subTask.setId(newId);
 
         Epic relatedEpic = getEpicById(subTask.getEpicId());

@@ -37,7 +37,7 @@ public class Managers {
         return loadFromFile(filePath.toFile());
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws ManagerLoadException {
+    private static FileBackedTaskManager loadFromFile(File file) throws ManagerLoadException {
         FileBackedTaskManager manager = new FileBackedTaskManager(
                 new IdGenerator(), getDefaultHistory(), file.toPath());
         ArrayList<String[]> tasksData = Utils.parseCSV(file);

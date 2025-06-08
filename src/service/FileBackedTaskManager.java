@@ -19,6 +19,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         this.saveFilePath = saveFilePath;
     }
 
+    public FileBackedTaskManager(IdGenerator idGenerator, HistoryManager historyManager, File saveFile) {
+        this(idGenerator, historyManager,saveFile.toPath());
+    }
+
     public void save() throws ManagerSaveException {
         String data = getAllTasksAsCSV();
 
@@ -27,13 +31,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             writer.write(data);
         } catch (IOException e) {
             System.out.println("Произошла ошибка сохранения в файл: " + e.getMessage());
+            throw new ManagerSaveException(e.getMessage());
         }
     }
 
     private String getAllTasksAsCSV() {
         StringBuilder result = new StringBuilder();
         ArrayList<Task> allTasks = new ArrayList<>();
-        int headersCommaCount = headers.length - 1;
 
         result.append(String.join(",", headers)).append("\n");
 
@@ -44,13 +48,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         for (Task task : allTasks) {
             if (task instanceof Epic epic) {
                 result.append(
-                        csvCommaEqualizer(headersCommaCount, epic.toCSV(headers.length)));
+                        csvCommaEqualizer(headers.length, epic.toCSV(headers.length)));
             } else if (task instanceof SubTask subTask) {
                 result.append(
-                        csvCommaEqualizer(headersCommaCount, subTask.toCSV(headers.length)));
+                        csvCommaEqualizer(headers.length, subTask.toCSV(headers.length)));
             } else {
                 result.append(
-                        csvCommaEqualizer(headersCommaCount, task.toCSV(headers.length)));
+                        csvCommaEqualizer(headers.length, task.toCSV(headers.length)));
             }
             result.append("\n");
         }
