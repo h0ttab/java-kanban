@@ -52,4 +52,15 @@ class SubTaskTest {
                 () -> taskManager.createSubTask(new SubTask("Подзадача 1 эпика 1",
                 "Описание подзадачи 1 эпика 1", Status.NEW, 2)));
     }
+
+    @Test
+    @DisplayName("Метод toCSV() возвращает корректную строку в формате CSV")
+    void shouldReturnValidCSV() {
+        SubTask subTask = new SubTask("Тестовая подзадача",
+                "Описание тестовой подзадачи", Status.DONE, 4);
+        subTask.setId(6);
+        String expectedCSV = "6,SUBTASK,Тестовая подзадача,DONE,Описание тестовой подзадачи,4";
+
+        assertEquals(expectedCSV, subTask.toCSV(6));
+    }
 }

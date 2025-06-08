@@ -31,4 +31,14 @@ class TaskTest {
         assertNotEquals(taskA, taskB);
     }
 
+    @Test
+    @DisplayName("Метод toCSV() возвращает корректную строку в формате CSV")
+    void shouldReturnValidCSV() {
+        Task taskA = new Task("Тестовая задача", "Описание тестовой задачи", Status.NEW);
+        taskA.setId(1);
+        String expectedCSV = "1,TASK,Тестовая задача,NEW,Описание тестовой задачи";
+
+        assertEquals(expectedCSV, taskA.toCSV(5));
+    }
+
 }
