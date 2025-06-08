@@ -152,8 +152,9 @@ public class InMemoryTaskManager implements TaskManager {
             task.setId(id);
             allTasks.put(id, task);
         } else {
-            System.out.println("Ошибка при вызове updateTask(Task task, int id): "
-                    + "Ошибка обновления задачи id " + id + " - задача не найдена");
+            System.out.printf("Ошибка при вызове updateTask(Task task, int id): "
+                    + "Ошибка обновления задачи id %d - задача не найдена", id);
+            System.out.println();
         }
     }
 
@@ -184,8 +185,9 @@ public class InMemoryTaskManager implements TaskManager {
             }
             allSubTasks.put(id, subTask);
         } else {
-            System.out.println("Ошибка при вызове updateSubTask(SubTask subTask, int id): "
-                    + "Ошибка обновления подзадачи id " + id + " - подзадача не найдена");
+            System.out.printf("Ошибка при вызове updateSubTask(SubTask subTask, int id): "
+                    + "Ошибка обновления подзадачи id %d - подзадача не найдена", id);
+            System.out.println();
         }
     }
 
@@ -195,8 +197,9 @@ public class InMemoryTaskManager implements TaskManager {
             allTasks.remove(id);
             historyManager.remove(id);
         } else {
-            System.out.println("Ошибка при вызове removeTaskById(int id): Невозможно удалить задачу id "
-                    + id + " по id: задача не найдена.");
+            System.out.printf("Ошибка при вызове removeTaskById(int id):"
+                    + " Невозможно удалить задачу id %d по id: задача не найдена.", id);
+            System.out.println();
         }
     }
 
@@ -212,8 +215,9 @@ public class InMemoryTaskManager implements TaskManager {
             allEpics.remove(id);
             historyManager.remove(id);
         } else {
-            System.out.println("Ошибка при вызове removeEpicById(int id): Невозможно удалить эпик id "
-                    + id + " по id - эпик не найден.");
+            System.out.printf("Ошибка при вызове removeEpicById(int id): "
+                    + "Невозможно удалить эпик id %d по id - эпик не найден.", id);
+            System.out.println();
         }
     }
 
@@ -227,8 +231,9 @@ public class InMemoryTaskManager implements TaskManager {
             allSubTasks.remove(id);
             historyManager.remove(id);
         } else {
-            System.out.println("Ошибка при вызове removeSubTaskById(int id): Невозможно удалить подзадачу id "
-                    + id + " по id: подзадача не найдена.");
+            System.out.printf("Ошибка при вызове removeSubTaskById(int id): "
+                    + "Невозможно удалить подзадачу id %d по id: подзадача не найдена.", id);
+            System.out.println();
         }
     }
 }

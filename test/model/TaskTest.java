@@ -12,7 +12,6 @@ class TaskTest {
 
         Task taskA = new Task("Тестовая задача", "Описание тестовой задачи", Status.NEW);
         taskA.setId(1);
-
         Task taskB = new Task("Тестовая задача", "Описание тестовой задачи", Status.NEW);
         taskB.setId(1);
 

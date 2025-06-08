@@ -1,9 +1,9 @@
 package service.utils;
 
-import org.junit.jupiter.api.*;
-
 import java.io.*;
 import java.util.ArrayList;
+
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,7 +48,10 @@ public class UtilsTest {
     void shouldParseCSVFileCorrectly() throws IOException {
         File testFile = File.createTempFile("test", ".csv");
         testFile.deleteOnExit();
-        String testCSV = "value_a,value_b,value_c\nA,B,C";
+        String testCSV = """
+                value_a,value_b,value_c
+                A,B,C
+                """;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile.toString()))) {
             writer.write(testCSV);
