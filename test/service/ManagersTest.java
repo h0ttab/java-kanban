@@ -1,13 +1,14 @@
 package service;
 
-import model.*;
-import org.junit.jupiter.api.*;
-import service.exceptions.ManagerLoadException;
-import service.utils.Utils;
-
 import java.io.*;
 import java.nio.file.Path;
 import java.util.*;
+
+import org.junit.jupiter.api.*;
+
+import model.*;
+import service.exceptions.ManagerLoadException;
+import service.utils.Utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,7 +33,7 @@ public class ManagersTest {
 
     @Test
     @DisplayName("Класс Managers возвращает корректно работающий экземпляр менеджера истории")
-    void shouldReturnCorrectlyInitializedHistoryManager(){
+    void shouldReturnCorrectlyInitializedHistoryManager() {
         HistoryManager historyManager = Managers.getDefaultHistory();
 
         assertNotNull(historyManager.getHistory());
@@ -47,7 +48,7 @@ public class ManagersTest {
         String testFileString = testFile.toString();
         String taskCSV = "1,TASK,Task1,NEW,Description task1,";
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))) {
             writer.write("id,type,name,status,description,epic");
             writer.write("\n");
             writer.write(taskCSV);
@@ -76,14 +77,14 @@ public class ManagersTest {
     void shouldThrowManagerLoadException() throws IOException {
         File dir = new File(System.getProperty("user.home"));
 
-        assertThrows(ManagerLoadException.class, ()->Managers.getFileBacked(dir));
+        assertThrows(ManagerLoadException.class, () -> Managers.getFileBacked(dir));
     }
 
     @Test
     @DisplayName("Метод loadFromFile корректно загружает данные из CSV файла")
     void shouldCorrectlyLoadFromCSVFile() throws IOException {
         File testFile = File.createTempFile("test", "csv");
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))) {
             writer.write("""
                     id,type,name,status,description,epic
                     1,TASK,Task1,NEW,Description task1,
@@ -104,7 +105,7 @@ public class ManagersTest {
     @DisplayName("Метод loadFromFile выбрасывает исключение ManagerLoadException при невалидном CSV")
     void shouldThrowManagerLoadExceptionForInvalidCSV() throws IOException {
         File testFile = File.createTempFile("test", "csv");
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile))) {
             writer.write("""
                     id,type,name,status,description,epic
                     1,TASK,Task1,NEW,Description task1,
@@ -114,6 +115,6 @@ public class ManagersTest {
             e.printStackTrace();
         }
 
-       assertThrows(ManagerLoadException.class, ()->Managers.getFileBacked(testFile));
+        assertThrows(ManagerLoadException.class, () -> Managers.getFileBacked(testFile));
     }
 }

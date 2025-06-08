@@ -11,7 +11,7 @@ public class Utils {
         int currentIndex = 0;
 
         if (!s.contains(substring)) {
-           return 0;
+            return 0;
         }
 
         while (s.indexOf(substring, currentIndex) != -1) {
@@ -33,7 +33,7 @@ public class Utils {
     public static ArrayList<String[]> parseCSV(File file) {
         ArrayList<String[]> data = new ArrayList<>();
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             while (reader.ready()) {
                 data.add(reader.readLine().split(","));
             }

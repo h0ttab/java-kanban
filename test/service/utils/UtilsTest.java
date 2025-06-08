@@ -1,15 +1,9 @@
 package service.utils;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Path;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +50,7 @@ public class UtilsTest {
         testFile.deleteOnExit();
         String testCSV = "value_a,value_b,value_c\nA,B,C";
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile.toString()))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(testFile.toString()))) {
             writer.write(testCSV);
         } catch (Exception e) {
             e.printStackTrace();

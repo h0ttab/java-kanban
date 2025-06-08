@@ -4,7 +4,6 @@ import model.*;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
-import java.io.IOException;
 import java.lang.reflect.*;
 
 import static org.junit.jupiter.api.Assertions.*;

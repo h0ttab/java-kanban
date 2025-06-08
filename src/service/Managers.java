@@ -1,11 +1,11 @@
 package service;
 
+import service.exceptions.ManagerLoadException;
+import service.utils.Utils;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
-
-import service.exceptions.ManagerLoadException;
-import service.utils.Utils;
 
 public class Managers {
 

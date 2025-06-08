@@ -8,7 +8,7 @@ class TaskTest {
 
     @Test
     @DisplayName("Две одинаковые задачи должны быть равны при сравнении через equals()")
-    void shouldConsiderTwoIdenticalTasksEqual(){
+    void shouldConsiderTwoIdenticalTasksEqual() {
 
         Task taskA = new Task("Тестовая задача", "Описание тестовой задачи", Status.NEW);
         taskA.setId(1);
@@ -21,7 +21,7 @@ class TaskTest {
 
     @Test
     @DisplayName("Две одинаковые по содержимому задачи не должны быть равны при разных ID")
-    void shouldNotConsiderTwoIdenticalTasksWithDifferentIdEqual(){
+    void shouldNotConsiderTwoIdenticalTasksWithDifferentIdEqual() {
 
         Task taskA = new Task("Тестовая задача", "Описание тестовой задачи", Status.NEW);
         taskA.setId(1);

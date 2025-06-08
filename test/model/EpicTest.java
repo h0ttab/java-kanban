@@ -65,7 +65,7 @@ class EpicTest {
 
     @Test
     @DisplayName("Конструктор с параметром статуса корректно создаёт эпик с нужным статусом")
-    void shouldCreateEpicWithStatus(){
+    void shouldCreateEpicWithStatus() {
         Status expectedStatus = Status.DONE;
         Epic testEpicWithStatus = new Epic("Тестовый эпик", "Описание тестового эпика", expectedStatus);
 
