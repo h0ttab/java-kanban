@@ -35,7 +35,7 @@ public class Task {
     }
 
     public String toCSV(int headersCount) {
-        return String.format("%s,%s,%s,%s,%s", id,"TASK",title,status,description);
+        return String.format("%s,%s,%s,%s,%s",id,"TASK",title,status,description);
     }
 
     @Override
