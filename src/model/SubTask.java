@@ -16,7 +16,8 @@ public class SubTask extends Task {
 
     @Override
     public String toCSV(int headersCount) {
-        return super.toCSV(headersCount).replace("TASK", "SUBTASK") + "," + epicId;
+        String taskCSV = super.toCSV(headersCount).replace("TASK", "SUBTASK");
+        return String.format("%s,%s", taskCSV, epicId);
     }
 
     @Override
