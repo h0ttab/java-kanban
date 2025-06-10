@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Objects;
+import java.util.*;
 
 public class Task {
     private final String title;
@@ -32,6 +32,10 @@ public class Task {
 
     public Status getStatus() {
         return status;
+    }
+
+    public String toCSV(int headersCount) {
+        return String.format("%s,%s,%s,%s,%s",id,"TASK",title,status,description);
     }
 
     @Override

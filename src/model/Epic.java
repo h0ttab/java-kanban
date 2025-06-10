@@ -10,6 +10,11 @@ public class Epic extends Task {
         relatedSubTaskMap = new HashMap<>();
     }
 
+    public Epic(String title, String description, Status status) {
+        super(title, description, status);
+        relatedSubTaskMap = new HashMap<>();
+    }
+
     public List<Integer> getSubTaskIdList() {
         return new ArrayList<>(relatedSubTaskMap.keySet());
     }
@@ -79,6 +84,11 @@ public class Epic extends Task {
         } else {
             return Status.IN_PROGRESS;
         }
+    }
+
+    @Override
+    public String toCSV(int headersCount) {
+        return super.toCSV(headersCount).replace("TASK", "EPIC");
     }
 
     @Override

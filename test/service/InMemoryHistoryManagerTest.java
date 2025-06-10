@@ -5,15 +5,14 @@ import org.junit.jupiter.api.*;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryHistoryManagerTest {
-    private HistoryManager historyManager;
-
     private static final Task task = new Task("Задача", "Описание задачи", Status.NEW);
     private static final Epic epic = new Epic("Эпик", "Описание эпика");
     private static final SubTask subTask = new SubTask("Подзадача", "Описание подзадачи",
             Status.DONE, 2);
+    private HistoryManager historyManager;
 
     @BeforeEach
     void initHistoryManager() {

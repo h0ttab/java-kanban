@@ -5,9 +5,9 @@ import model.*;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> allTasks = new HashMap<>();
-    private final Map<Integer, Epic> allEpics = new HashMap<>();
-    private final Map<Integer, SubTask> allSubTasks = new HashMap<>();
+    protected final Map<Integer, Task> allTasks = new HashMap<>();
+    protected final Map<Integer, Epic> allEpics = new HashMap<>();
+    protected final Map<Integer, SubTask> allSubTasks = new HashMap<>();
     private final IdGenerator idGenerator;
     private final HistoryManager historyManager;
 
@@ -16,11 +16,16 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
-    private int generateUniqueId(Map<Integer, ?> storage) {
+    private int generateUniqueId() {
+        Set<Integer> allIds = new HashSet<>();
+        allIds.addAll(allTasks.keySet());
+        allIds.addAll(allEpics.keySet());
+        allIds.addAll(allSubTasks.keySet());
+
         int id;
         do {
             id = idGenerator.generateId();
-        } while (storage.containsKey(id));
+        } while (allIds.contains(id));
         return id;
     }
 
@@ -113,7 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createTask(Task task) {
-        int newId = generateUniqueId(allTasks);
+        int newId = generateUniqueId();
         task.setId(newId);
         allTasks.put(newId, task);
 
@@ -122,7 +127,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createEpic(Epic epic) {
-        int newId = generateUniqueId(allEpics);
+        int newId = generateUniqueId();
         epic.setId(newId);
         allEpics.put(newId, epic);
 
@@ -131,7 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubTask(SubTask subTask) {
-        int newId = generateUniqueId(allSubTasks);
+        int newId = generateUniqueId();
         subTask.setId(newId);
 
         Epic relatedEpic = getEpicById(subTask.getEpicId());
@@ -147,8 +152,9 @@ public class InMemoryTaskManager implements TaskManager {
             task.setId(id);
             allTasks.put(id, task);
         } else {
-            System.out.println("Ошибка при вызове updateTask(Task task, int id): "
-                    + "Ошибка обновления задачи id " + id + " - задача не найдена");
+            System.out.printf("Ошибка при вызове updateTask(Task task, int id): "
+                    + "Ошибка обновления задачи id %d - задача не найдена", id);
+            System.out.println();
         }
     }
 
@@ -179,8 +185,9 @@ public class InMemoryTaskManager implements TaskManager {
             }
             allSubTasks.put(id, subTask);
         } else {
-            System.out.println("Ошибка при вызове updateSubTask(SubTask subTask, int id): "
-                    + "Ошибка обновления подзадачи id " + id + " - подзадача не найдена");
+            System.out.printf("Ошибка при вызове updateSubTask(SubTask subTask, int id): "
+                    + "Ошибка обновления подзадачи id %d - подзадача не найдена", id);
+            System.out.println();
         }
     }
 
@@ -190,8 +197,9 @@ public class InMemoryTaskManager implements TaskManager {
             allTasks.remove(id);
             historyManager.remove(id);
         } else {
-            System.out.println("Ошибка при вызове removeTaskById(int id): Невозможно удалить задачу id "
-                    + id + " по id: задача не найдена.");
+            System.out.printf("Ошибка при вызове removeTaskById(int id):"
+                    + " Невозможно удалить задачу id %d по id: задача не найдена.", id);
+            System.out.println();
         }
     }
 
@@ -207,8 +215,9 @@ public class InMemoryTaskManager implements TaskManager {
             allEpics.remove(id);
             historyManager.remove(id);
         } else {
-            throw new IllegalArgumentException("Ошибка при вызове removeEpicById(int id): Невозможно удалить эпик id "
-                    + id + " по id - эпик не найден.");
+            System.out.printf("Ошибка при вызове removeEpicById(int id): "
+                    + "Невозможно удалить эпик id %d по id - эпик не найден.", id);
+            System.out.println();
         }
     }
 
@@ -222,8 +231,9 @@ public class InMemoryTaskManager implements TaskManager {
             allSubTasks.remove(id);
             historyManager.remove(id);
         } else {
-            System.out.println("Ошибка при вызове removeSubTaskById(int id): Невозможно удалить подзадачу id "
-                    + id + " по id: подзадача не найдена.");
+            System.out.printf("Ошибка при вызове removeSubTaskById(int id): "
+                    + "Невозможно удалить подзадачу id %d по id: подзадача не найдена.", id);
+            System.out.println();
         }
     }
 }

@@ -1,6 +1,9 @@
 package model;
 
+import java.lang.reflect.Field;
+
 import org.junit.jupiter.api.*;
+
 import service.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,6 +62,35 @@ class EpicTest {
         taskManager.updateSubTask(new SubTask("Подзадача",
                 "Описание подзадачи", Status.DONE, 1), 3);
         assertEquals(Status.DONE, taskManager.getEpicById(1).getStatus());
+    }
+
+    @Test
+    @DisplayName("Конструктор с параметром статуса корректно создаёт эпик с нужным статусом")
+    void shouldCreateEpicWithStatus() {
+        Status expectedStatus = Status.DONE;
+        Epic testEpicWithStatus = new Epic("Тестовый эпик", "Описание тестового эпика", expectedStatus);
+
+        try {
+            Class<?> superclassTask = testEpicWithStatus.getClass().getSuperclass();
+
+            Field statusField = superclassTask.getDeclaredField("status");
+            statusField.setAccessible(true);
+
+            Object fieldValue = statusField.get(testEpicWithStatus);
+            Status actualStatus = (Status) fieldValue;
+
+            assertEquals(expectedStatus, actualStatus);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    @DisplayName("Метод toCSV() возвращает корректную строку в формате CSV")
+    void shouldReturnValidCSV() {
+        String expectedCSV = "1,EPIC,Тестовый эпик,NEW,Описание тестового эпика";
+        assertEquals(expectedCSV, epicA.toCSV(5));
     }
 
 }

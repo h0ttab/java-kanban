@@ -1,6 +1,7 @@
 package service;
 
 import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class IdGeneratorTest {
@@ -8,7 +9,7 @@ public class IdGeneratorTest {
 
     @Test
     @DisplayName("Генератор должен увеличивать внутренний счётчик ID на +1 после каждой генерации")
-    void shouldReturnUniqueId(){
+    void shouldReturnUniqueId() {
         int expectedFirstId = 1;
         assertEquals(expectedFirstId, idGenerator.generateId());
 
