@@ -1,12 +1,12 @@
 package service;
 
-import model.*;
-import service.exceptions.ManagerSaveException;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
+
+import model.*;
+import service.exceptions.ManagerSaveException;
 
 import static service.utils.Utils.csvCommaEqualizer;
 
@@ -21,6 +21,31 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     public FileBackedTaskManager(IdGenerator idGenerator, HistoryManager historyManager, File saveFile) {
         this(idGenerator, historyManager, saveFile.toPath());
+    }
+
+    public static void main(String[] args) throws IOException {
+        File testFile = File.createTempFile("test", "csv");
+        testFile.deleteOnExit();
+        FileBackedTaskManager managerA = Managers.getFileBacked(testFile);
+        Task taskA = new Task("Задача 1", "Описание задачи 1", Status.NEW);
+        Task taskB = new Task("Задача 2", "Описание задачи 2", Status.DONE);
+        Epic epicA = new Epic("Эпик 1", "Описание эпика");
+        SubTask subTaskA = new SubTask("Подзадача 1", "Описание подзадачи", Status.NEW, 3);
+
+        int taskAId = managerA.createTask(taskA);
+        int taskBId = managerA.createTask(taskB);
+        int epicAId = managerA.createEpic(epicA);
+        int subTaskAId = managerA.createSubTask(subTaskA);
+
+        FileBackedTaskManager managerB = Managers.getFileBacked(testFile);
+
+        if (managerA.getTaskById(taskAId).equals(managerB.getTaskById(taskAId))
+                && managerA.getTaskById(taskBId).equals(managerB.getTaskById(taskBId))
+                && managerA.getEpicById(epicAId).equals(managerB.getEpicById(epicAId))
+                && managerA.getSubTaskById(subTaskAId).equals(managerB.getSubTaskById(subTaskAId))) {
+            System.out.println("Менеджеры, созданные из одного и того же файла, имеют одинаковый набор задач.");
+        }
+
     }
 
     public void save() throws ManagerSaveException {
@@ -105,31 +130,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         Epic relatedEpic = getEpicById(subTask.getEpicId());
         relatedEpic.addSubTask(id, subTask.getStatus());
         allSubTasks.put(id, subTask);
-    }
-
-    public static void main(String[] args) throws IOException {
-        File testFile = File.createTempFile("test", "csv");
-        testFile.deleteOnExit();
-        FileBackedTaskManager managerA = Managers.getFileBacked(testFile);
-        Task taskA = new Task("Задача 1", "Описание задачи 1", Status.NEW);
-        Task taskB = new Task("Задача 2", "Описание задачи 2", Status.DONE);
-        Epic epicA = new Epic("Эпик 1", "Описание эпика");
-        SubTask subTaskA = new SubTask("Подзадача 1","Описание подзадачи", Status.NEW, 3);
-
-        int taskAId = managerA.createTask(taskA);
-        int taskBId = managerA.createTask(taskB);
-        int epicAId = managerA.createEpic(epicA);
-        int subTaskAId = managerA.createSubTask(subTaskA);
-
-        FileBackedTaskManager managerB = Managers.getFileBacked(testFile);
-
-        if (managerA.getTaskById(taskAId).equals(managerB.getTaskById(taskAId))
-                && managerA.getTaskById(taskBId).equals(managerB.getTaskById(taskBId))
-                && managerA.getEpicById(epicAId).equals(managerB.getEpicById(epicAId))
-                && managerA.getSubTaskById(subTaskAId).equals(managerB.getSubTaskById(subTaskAId))) {
-            System.out.println("Менеджеры, созданные из одного и того же файла, имеют одинаковый набор задач.");
-        }
-
     }
 
     @Override

@@ -1,8 +1,8 @@
 package service;
 
-import model.*;
+import java.util.List;
 
-import java.util.*;
+import model.*;
 
 public interface TaskManager {
     List<Task> getHistory();

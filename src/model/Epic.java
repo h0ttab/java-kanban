@@ -92,17 +92,6 @@ public class Epic extends Task {
     }
 
     @Override
-    public String toString() {
-        return "Epic{" +
-                "subTaskIdList=" + getSubTaskIdList() +
-                ", id=" + super.getId() +
-                ", title='" + super.getTitle() + '\'' +
-                ", description.length='" + super.getDescription().length() + '\'' +
-                ", status=" + getStatus() +
-                '}';
-    }
-
-    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getRelatedSubTaskMap());
     }
@@ -121,5 +110,16 @@ public class Epic extends Task {
 
         Epic epic = (Epic) object;
         return this.relatedSubTaskMap.equals(epic.relatedSubTaskMap);
+    }
+
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "subTaskIdList=" + getSubTaskIdList() +
+                ", id=" + super.getId() +
+                ", title='" + super.getTitle() + '\'' +
+                ", description.length='" + super.getDescription().length() + '\'' +
+                ", status=" + getStatus() +
+                '}';
     }
 }

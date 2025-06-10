@@ -1,6 +1,6 @@
 package model;
 
-import java.util.*;
+import java.util.Objects;
 
 public class Task {
     private final String title;
@@ -35,17 +35,12 @@ public class Task {
     }
 
     public String toCSV(int headersCount) {
-        return String.format("%s,%s,%s,%s,%s",id,"TASK",title,status,description);
+        return String.format("%s,%s,%s,%s,%s", id, "TASK", title, status, description);
     }
 
     @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + getId() +
-                ", title='" + getTitle() + '\'' +
-                ", description.length='" + getDescription().length() + '\'' +
-                ", status=" + getStatus() +
-                '}';
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getDescription(), getStatus());
     }
 
     @Override
@@ -68,7 +63,12 @@ public class Task {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getDescription(), getStatus());
+    public String toString() {
+        return "Task{" +
+                "id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", description.length='" + getDescription().length() + '\'' +
+                ", status=" + getStatus() +
+                '}';
     }
 }

@@ -1,8 +1,8 @@
 package service;
 
-import model.*;
-
 import java.util.*;
+
+import model.Task;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final Map<Integer, Node<Task>> historyMap = new HashMap<>();
@@ -17,6 +17,32 @@ public class InMemoryHistoryManager implements HistoryManager {
             node.prev = tail;
         }
         tail = node;
+    }
+
+    @Override
+    public void addTask(Task task) {
+        Integer taskId = task.getId();
+
+        if (historyMap.containsKey(taskId)) {
+            remove(taskId);
+        }
+
+        Node<Task> newHistoryRecord = new Node<>(task);
+        historyMap.put(taskId, newHistoryRecord);
+        linkLast(newHistoryRecord);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        List<Task> history = new ArrayList<>();
+        Node<Task> pointer = head;
+
+        while (pointer != null) {
+            history.add(pointer.value);
+            pointer = pointer.next;
+        }
+
+        return history;
     }
 
     public void remove(int taskId) {
@@ -42,32 +68,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    @Override
-    public List<Task> getHistory() {
-        List<Task> history = new ArrayList<>();
-        Node<Task> pointer = head;
-
-        while (pointer != null) {
-            history.add(pointer.value);
-            pointer = pointer.next;
-        }
-
-        return history;
-    }
-
-    @Override
-    public void addTask(Task task) {
-        Integer taskId = task.getId();
-
-        if (historyMap.containsKey(taskId)) {
-            remove(taskId);
-        }
-
-        Node<Task> newHistoryRecord = new Node<>(task);
-        historyMap.put(taskId, newHistoryRecord);
-        linkLast(newHistoryRecord);
-    }
-
     static final class Node<T> {
         public Node<T> next;
         public Node<T> prev;
@@ -78,8 +78,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         public void removeSelf() {
-           Node<T> prevNode;
-           Node<T> nextNode;
+            Node<T> prevNode;
+            Node<T> nextNode;
 
             if (next != null) {
                 nextNode = next;
@@ -93,16 +93,16 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         @Override
-        public boolean equals(Object object) {
-            if (this == object) return true;
-            if (object == null || getClass() != object.getClass()) return false;
-           Node<?> node = (Node<?>) object;
-            return Objects.equals(next, node.next) && Objects.equals(prev, node.prev) && Objects.equals(value, node.value);
+        public int hashCode() {
+            return Objects.hash(next, prev, value);
         }
 
         @Override
-        public int hashCode() {
-            return Objects.hash(next, prev, value);
+        public boolean equals(Object object) {
+            if (this == object) return true;
+            if (object == null || getClass() != object.getClass()) return false;
+            Node<?> node = (Node<?>) object;
+            return Objects.equals(next, node.next) && Objects.equals(prev, node.prev) && Objects.equals(value, node.value);
         }
 
         @Override

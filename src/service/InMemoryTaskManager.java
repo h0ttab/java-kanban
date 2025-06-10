@@ -1,8 +1,8 @@
 package service;
 
-import model.*;
-
 import java.util.*;
+
+import model.*;
 
 public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Task> allTasks = new HashMap<>();
